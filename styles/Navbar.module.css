@@ -1,0 +1,26 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  font-size: 3rem;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.settingBtn{
+  font-size: 2rem;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.settingBtn:hover{
+  color: rgb(255, 199, 146);
+}
+
+.settingBtn:active{
+  color:aquamarine;
+}

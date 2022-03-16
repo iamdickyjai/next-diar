@@ -1,0 +1,7 @@
+/pages/
+/public/
+/src/
+/components/
+/node_modules/
+/styles/
+/.eslintrc.json
