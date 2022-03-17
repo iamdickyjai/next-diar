@@ -22,13 +22,6 @@ function Form() {
     formData.append("file", path.files[0]);
 
     try {
-      // const res = await fetch(`https://api-dot-d-fyp-341615.df.r.appspot.com/`, {
-      //   method: 'POST',
-      //   body: formData,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*'
-      //   }
-      // })
       const res = await fetch(`https://api-6rvxylw3fq-de.a.run.app/`, {
         method: 'POST',
         body: formData,
@@ -44,7 +37,6 @@ function Form() {
       //   }
       // })
 
-
       const result = await res.json();
       console.log(result);
       // result.user => 'Ada Lovelace'
@@ -56,8 +48,10 @@ function Form() {
   return (
     <form onSubmit={registerUser}>
       <label htmlFor="name">Name</label>
-      <input id="name" name="file" type="file" accept='audio/*' required />
-      <button type="submit">Register</button>
+      <input id="name" name="file" type="file" accept='audio/*' />
+      <button type="submit" name='upload'>Register</button>
+      <input id="link" name="link" type="text" />
+      <button type="submit" name='upload'>Register</button>
     </form>
   )
 }
