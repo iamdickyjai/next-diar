@@ -1,15 +1,17 @@
 import React from 'react';
 import cn from 'classnames';
 import toast, { Toaster } from 'react-hot-toast';
-import download from 'downloadjs';
+import { useRouter } from 'next/router';
 
 import styles from '../styles/Home.module.css';
+import { DataContext } from '../components/reducer';
 
 export default function Home() {
-  const [selected, setSelect] = React.useState("");
-  const [result, setResult] = React.useState();
+  const [state, dispatch] = React.useContext(DataContext);
   const [isAllow, setAllow] = React.useState(false);
   const [isDone, setDone] = React.useState(false);
+
+  const router = useRouter();
 
   // Control the appropriate toast to be showed when app selection is dis/enable
   React.useEffect(() => {
@@ -23,30 +25,38 @@ export default function Home() {
 
   // Action when diarization is completed
   React.useEffect(() => {
-    if (result) {
-      console.log(result);
-
+    if (isDone) {
       toast.remove();
-
-      setDone(true);
       toast.success("Done!", { duration: 2000 })
     }
-  }, [result])
+  }, [isDone])
 
   // Submit the result to corresponding application
   const submit = () => {
-    if (selected == "") {
+    if (!state.application) {
       toast.error("You need to choose a feature first!", { duration: 2000 });
-    } else {
-      // TODO Navigate to according page
+      return;
     }
+
+    // !Should not happen
+    if (!state.file) {
+      toast.error("Cannot detect your file. Please try again.", { duration: 2000 });
+      return;
+    }
+
+    // !Should not happen
+    if (!state.timestamp) {
+      toast.error("Diarization is corrupted. Please try again.", { duration: 2000 });
+      return;
+    }
+
+    router.push('/application');
   }
 
   const reset = () => {
-    setSelect("");
-    setResult(null);
     setAllow(false);
     setDone(false);
+    dispatch({ type: 'CLEAR' });
 
     toast.success("Reset!", { duration: 2000 })
   }
@@ -54,8 +64,8 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Toaster />
-      <FileSelection setResult={setResult} setAllow={setAllow} disabled={isAllow} />
-      <AppSelection setSelect={setSelect} disabled={!isAllow} />
+      <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
+      <AppSelection disabled={!isAllow} />
       {isDone &&
         <div className={styles.popupBtn}>
           <button onClick={submit}>GO</button><button onClick={reset}>Reset</button>
@@ -68,10 +78,18 @@ function FileSelection(props) {
   const [link, setLink] = React.useState("");
   const fileRef = React.createRef();
   const [isFile, setDecision] = React.useState(false);
+  const [state, dispatch] = React.useContext(DataContext);
 
-  const setResult = props.setResult;
+  const setDone = props.setDone;
   const setAllow = props.setAllow;
   const disabled = props.disabled;
+
+  React.useEffect(() => {
+    if (state.file && state.timestamp) {
+      setAllow(true);
+      setDone(true);
+    }
+  }, [])
 
   // When user typed in link, remove file
   const chooseLink = (event) => {
@@ -145,7 +163,8 @@ function FileSelection(props) {
       // Failed: show error and enable inputSelection again.
       const result = await response.json();
       if (response.status == 200) {
-        setResult(result);
+        dispatch({ type: "UPDATE_DIAR", timestamp: result, file: audio });
+        setDone(true);
       } else {
         switch (response.status) {
           case 500:
@@ -179,14 +198,19 @@ function FileSelection(props) {
 }
 
 function AppSelection(props) {
-  const setSelect = props.setSelect;
   const disabled = props.disabled;
-
+  const [state, dispatch] = React.useContext(DataContext);
   const [blockArr, setBlock] = React.useState([
     { type: "extract", id: 0, check: false },
     { type: "translate", id: 1, check: false },
     { type: "conference", id: 2, check: false }
   ]);
+
+  React.useEffect(() => {
+    if (state.application) {
+      selectHandler(blockArr.find(ele => ele.type == state.application).id)
+    }
+  }, [])
 
   const selectHandler = (id) => {
     // Get the unselected option, and set them to false
@@ -197,7 +221,6 @@ function AppSelection(props) {
     const arrWithTheID = blockArr.filter(x => x.id === id);
     arrWithTheID.forEach(ele => {
       ele.check = !ele.check;
-      ele.check ? setSelect(ele.type) : setSelect("");
     });
 
     // Concat two arrays into one again, then sort them according to id, so the order will not change
@@ -224,16 +247,22 @@ function SelectBlock(props) {
   const handler = props.handler;
   const disabled = props.disabled;
 
+  const [state, dispatch] = React.useContext(DataContext);
+
+  const Click = () => {
+    dispatch({ type: "UPDATE_SELECTION", application: type });
+    handler(id);
+  }
+
   return (
     <div
       className={cn(styles.block, { [styles.selected]: check }, { [styles.disabled]: disabled })}
-      onClick={() => handler(id)}
+      onClick={() => Click()}
     >
       <h1>{type}</h1>
       <p>{"TODO: "}</p>
       <li>{"諗下如果轉緊個陣refresh會點?例如refresh前話比server知唔駛再做?"}</li>
       <li>{"!!!讀useRouter, 好似好有用"}</li>
-      <li>{"個block都要加個effect, 例如hover會enlarge/變色"}</li>
       <div>Go&gt;&gt;&gt;</div>
     </div>
   )
