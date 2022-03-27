@@ -6,6 +6,11 @@
   align-items: flex-end;
 }
 
+.title{
+  color: #ffc83d;
+  text-shadow: 0px 0px 7px #ebaa05;
+}
+
 .settingBtn{
   font-size: 2rem;
   -webkit-touch-callout: none; /* iOS Safari */

@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import toast, { Toaster } from 'react-hot-toast';
+import download from 'downloadjs';
 
 import styles from '../styles/Home.module.css';
 
@@ -56,9 +57,9 @@ export default function Home() {
       <FileSelection setResult={setResult} setAllow={setAllow} disabled={isAllow} />
       <AppSelection setSelect={setSelect} disabled={!isAllow} />
       {isDone &&
-        <>
+        <div className={styles.popupBtn}>
           <button onClick={submit}>GO</button><button onClick={reset}>Reset</button>
-        </>}
+        </div>}
     </div>
   )
 }
@@ -106,42 +107,37 @@ function FileSelection(props) {
   // Success: Arrays of timestamp
   // Failed: Corresponding status code
   const fetchTimeStamp = async () => {
-    let request;
-    let content;
-    let config;
-
     // Disable pointer event 
     setAllow(true);
 
-    // Prepare setting for fetch according to decision user made
-    if (isFile) {
-      request = `${process.env.url}/`;
+    try {
+      let audio;
 
-      const path = fileRef.current.files;
+      if (isFile) {
+        const path = fileRef.current.files;
+        audio = path[0];
+      } else {
+        const res = await fetch(`${process.env.url}/download`, {
+          method: 'POST',
+          body: JSON.stringify({ "url": link }),
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+          }
+        })
+
+        audio = await res.blob();
+      }
 
       const formData = new FormData();
-      formData.append("file", path[0]);
-      content = formData;
+      formData.append("file", audio);
 
-      config = {
-        'Access-Control-Allow-Origin': '*',
-      }
-    } else {
-      request = `${process.env.url}/youtube`;
-      content = JSON.stringify({ "url": link });
-
-      config = {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-      }
-    }
-
-    // SEND POST REQUEST HERE
-    try {
-      const response = await fetch(request, {
+      const response = await fetch(process.env.url, {
         method: "POST",
-        body: content,
-        headers: config,
+        body: formData,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       })
 
       // Wait for response
@@ -176,7 +172,7 @@ function FileSelection(props) {
     <div className={cn(styles.inputContainer, { [styles.disabled]: disabled })}>
       <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink} />
       <span>or</span>
-      <input type="file" onChange={chooseUpload} ref={fileRef} />
+      <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />
       <button onClick={submit}>Go</button>
     </div>
   )
