@@ -63,6 +63,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <button onClick={() => router.push('/test')}>Test</button>
       <Toaster />
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
@@ -163,7 +164,7 @@ function FileSelection(props) {
       // Failed: show error and enable inputSelection again.
       const result = await response.json();
       if (response.status == 200) {
-        dispatch({ type: "UPDATE_DIAR", timestamp: result, file: audio });
+        dispatch({ type: "UPDATE_DIAR", timestamp: result['result'], file: audio });
         setDone(true);
       } else {
         switch (response.status) {

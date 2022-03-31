@@ -1,0 +1,25 @@
+.container {
+  background-color: #918e41;
+  display: flex;
+  border-radius: 8px;
+  box-shadow: inset 0px 0px 5px #353d05;
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 5px 18px;
+
+  flex-direction: row;
+  align-items: center;
+}
+
+.index {
+}
+
+.input {
+  flex-grow: 1;
+  background-color: #e6e169;
+  border: none;
+  padding: 5px;
+  font-size: 1.5rem;
+  width: 100%;
+}
