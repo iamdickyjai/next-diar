@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 import { DataContext } from '../components/reducer';
 
+
 export default function Home() {
   const [state, dispatch] = React.useContext(DataContext);
   const [isAllow, setAllow] = React.useState(false);
@@ -63,7 +64,6 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <button onClick={() => router.push('/test')}>Test</button>
       <Toaster />
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
@@ -164,7 +164,7 @@ function FileSelection(props) {
       // Failed: show error and enable inputSelection again.
       const result = await response.json();
       if (response.status == 200) {
-        dispatch({ type: "UPDATE_DIAR", timestamp: result['result'], file: audio });
+        dispatch({ type: "UPDATE_DIAR", timestamp: result['result'], file: audio, link: link });
         setDone(true);
       } else {
         switch (response.status) {
@@ -202,9 +202,18 @@ function AppSelection(props) {
   const disabled = props.disabled;
   const [state, dispatch] = React.useContext(DataContext);
   const [blockArr, setBlock] = React.useState([
-    { type: "extract", id: 0, check: false },
-    { type: "translate", id: 1, check: false },
-    { type: "conference", id: 2, check: false }
+    {
+      type: "extract", id: 0, check: false,
+      description: ["Firest"]
+    },
+    {
+      type: "subtitle", id: 1, check: false,
+      description: ["assadas", "asdasdas"]
+    },
+    {
+      type: "processing", id: 2, check: false,
+      description: ["..."]
+    },
   ]);
 
   React.useEffect(() => {
@@ -234,7 +243,7 @@ function AppSelection(props) {
   return (
     <div className={styles.selectionArea}>
       {blockArr.map(x => {
-        return <SelectBlock type={x.type} check={x.check}
+        return <SelectBlock type={x.type} description={x.description} check={x.check}
           id={x.id} key={x.id} handler={selectHandler} disabled={disabled} />
       })}
     </div>
@@ -243,6 +252,7 @@ function AppSelection(props) {
 
 function SelectBlock(props) {
   const type = props.type;
+  const description = props.description;
   const check = props.check;
   const id = props.id;
   const handler = props.handler;
@@ -260,11 +270,8 @@ function SelectBlock(props) {
       className={cn(styles.block, { [styles.selected]: check }, { [styles.disabled]: disabled })}
       onClick={() => Click()}
     >
-      <h1>{type}</h1>
-      <p>{"TODO: "}</p>
-      <li>{"諗下如果轉緊個陣refresh會點?例如refresh前話比server知唔駛再做?"}</li>
-      <li>{"!!!讀useRouter, 好似好有用"}</li>
-      <div>Go&gt;&gt;&gt;</div>
+      <h1>{type.charAt(0).toUpperCase() + type.slice(1)}</h1>
+      {description.map(ele => <li>{ele}</li>)}
     </div>
   )
 }

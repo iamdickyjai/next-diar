@@ -1,13 +1,15 @@
 import React from 'react';
+
+
 import styles from '../../styles/Test.module.css';
-import Player from '../../components/player';
+import Player from '../../components/player_test';
 
 export default function Test() {
   const fileRef = React.createRef();
   const [file, setFile] = React.useState();
-  const timestamp = [[0, 13], [13, 15], [18, 26]];
+  // const timestamp = [[0, 13], [13, 15], [18, 26]];
   const playingKey = React.useRef();
-  // const timestamp = [[10, 15]];
+  const timestamp = [[10, 15]];
 
   const handleChange = () => {
     setFile(fileRef.current.files[0]);

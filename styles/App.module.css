@@ -1,5 +1,20 @@
-.list {
+.container {
+  margin: 40px auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.playerContainer {
+  width: 640px;
+  height: 360px;
+}
+
+.audioOnly {
+  height: 50px;
+}
+
+.main {
   width: 80%;
 }

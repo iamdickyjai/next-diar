@@ -3,7 +3,7 @@ import React from "react";
 import Item from "./item";
 import { DataContext } from "./reducer";
 
-export default function Extract() {
+export default function Subtitle() {
   const [state, dispatch] = React.useContext(DataContext);
 
   return (
@@ -15,8 +15,6 @@ export default function Extract() {
 
 function Main() {
   return (
-    <h1>
-      Surprise Mother Fucker
-    </h1>
+    <input type='text' />
   )
 }

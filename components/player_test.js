@@ -1,7 +1,63 @@
 import * as React from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import download from 'downloadjs';
 
+export default function Player(props) {
+  const audio = props.audio;
+  const timestamp = props.timestamp;
+
+  // State management
+  const audioCtx = React.useRef(new (window.AudioContext || window.webkitAudioContext)());
+  const audioRef = React.useRef();
+
+  React.useEffect(() => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = function () {
+      audioCtx.current.decodeAudioData(
+        fileReader.result,
+        function (buffer) {
+          const source = audioCtx.current.createBufferSource();
+          source.buffer = buffer;
+          source.loop = false;
+          source.start(0,
+            timestamp[0],
+            timestamp[1] - timestamp[0]);
+
+          const streamNode = audioCtx.current.createMediaStreamDestination();
+          source.connect(streamNode);
+
+          // const audioElem = new Audio();
+          // audioElem.controls = true;
+          // audioElem.preload = 'metadata';
+          // document.body.appendChild(audioElem);
+          // audioElem.srcObject = streamNode.stream;
+
+          audioRef.current.srcObject = streamNode.stream;
+          // console.log(source.buffer);
+
+          // const blob = new Blob([streamNode.stream]);
+          // console.log(streamNode);
+          // const url = URL.createObjectURL(blob);
+          // audioRef.current.src = url;
+
+          // download(blob, 'test.wav', 'audio/wav');
+        },
+        function (e) { console.log("Error"); });
+    };
+    fileReader.readAsArrayBuffer(audio);
+  }, [])
+
+  return (
+    <>
+      <audio controls preload='none' ref={audioRef}></audio>
+      <button>Play/Pause</button>
+    </>
+  )
+}
+
+/*
 export default function Player(props) {
   const audio = props.audio;
   const timestamp = props.timestamp;      // TODO: Allow user to adjust this
@@ -85,3 +141,4 @@ export default function Player(props) {
     </>
   )
 }
+*/

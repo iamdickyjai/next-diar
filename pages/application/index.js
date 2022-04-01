@@ -1,74 +1,84 @@
 import { useRouter } from "next/router";
+import cn from 'classnames';
 import React from "react";
 import ReactPlayer from 'react-player';
 
-import { DataContext } from "../../components/reducer";
-import Record from "../../components/record";
+import { DataContext, PlayContext } from "../../components/reducer";
+import Item from "../../components/item";
+import Subtitle from "../../components/subtitle";
+import Extract from "../../components/extract";
+import Processing from "../../components/processing";
 import styles from '../../styles/App.module.css';
 
 export default function App() {
-  const router = useRouter();
   const [state, dispatch] = React.useContext(DataContext);
-  const playerRef = React.createRef();
+  const [isLoading, setLoading] = React.useState(true);
 
-  const [playInfo, setPlayInfo] = React.useState({
-    playing: false,
-    playedSeconds: 0,
-    stopSecond: -1,
+  const player = React.useRef();
+  const url = React.useRef(URL.createObjectURL(state.file));
+  const [playing, setPlaying] = React.useState(false);
+  const [info, setInfo] = React.useState({
+    index: null,
+    seekTo: 0,
+    end: 0,
+  });
+  const router = useRouter();
+
+  // Return to Home page if info is not complete
+  React.useEffect(() => {
+    if (!state.file && !state.link) {
+      router.push('/');
+      return;
+    }
+    if (state.timestamp === null || !state.timestamp) {
+      router.push('/');
+      return
+    }
+
+    setLoading(false);
   })
 
   React.useEffect(() => {
-    console.log("Playing: " + playInfo.playing);
-
-  }, [playInfo.playing])
-
-  React.useEffect(() => {
-    console.log("PlayedSeconds: " + playInfo.playedSeconds);
-
-    if (playInfo.playing) {
-      playerRef.current.seekTo(playInfo.playedSeconds);
+    if (player.current) {
+      if (info.index !== null) {
+        player.current.seekTo(info.seekTo, 'seconds');
+        setPlaying(true);
+      } else {
+        setPlaying(false);
+      }
     }
-  }, [playInfo.playedSeconds])
+  }, [info])
 
-  React.useEffect(() => {
-    console.log("stopSecond: " + playInfo.stopSecond);
-  }, [playInfo.stopSecond])
-
-  const playHandler = (start, end) => {
-    setPlayInfo({ ...playInfo, playing: true, playedSeconds: start, stopSecond: end });
+  const handleProgress = (s) => {
+    if (s.playedSeconds > info.end || s.played === 1) {
+      setInfo({ ...info, index: null });
+    }
   }
 
   return (
     <>
-      <div style={{ width: 500, height: 100 }}>
-        <ReactPlayer
-          width='100%'
-          height='100%'
-          ref={playerRef}
-          playing={playInfo.playing}
-          controls={true}
-          url={URL.createObjectURL(state.file)}
-          config={{
-            file: {
-              forceAudio: true
-            },
-          }}
-        />
-      </div>
+      <PlayContext.Provider value={{ info, setInfo }}>
+        <div className={styles.container}>
+          {isLoading ? <h1>Loading...</h1> :
+            <>
+              <div className={cn(styles.playerContainer, { [styles.audioOnly]: !state.link })}>
+                <ReactPlayer url={state.link ? state.link : url.current}
+                  controls
+                  progressInterval={50}
+                  playing={playing}
+                  ref={player}
+                  height='100%' width='100%'
+                  onProgress={handleProgress} />
 
-      <div className={styles.list}>
-        {state.timestamp.map((ele) => {
-          return (
-            <Record playHandler={playHandler} timestamp={ele} />
-          )
-        })}
-      </div>
+              </div>
+              <div className={styles.main}>
+                {state.timestamp.map((ele, index) => <Item key={index} timestamp={ele} index={index} />)}
+              </div>
+            </>
+          }
 
-      <button>Submit</button>
-
-      <div onClick={() => router.back()}>
-        <h3>Go back</h3>
-      </div>
+        </div>
+      </PlayContext.Provider>
     </>
   )
 }
