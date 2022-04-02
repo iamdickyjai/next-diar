@@ -271,7 +271,7 @@ function SelectBlock(props) {
       onClick={() => Click()}
     >
       <h1>{type.charAt(0).toUpperCase() + type.slice(1)}</h1>
-      {description.map(ele => <li>{ele}</li>)}
+      {description.map((ele, index) => <li key={index}>{ele}</li>)}
     </div>
   )
 }

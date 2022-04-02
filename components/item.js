@@ -1,5 +1,4 @@
 import React from 'react';
-import cn from 'classnames';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay, faCirclePause } from '@fortawesome/free-solid-svg-icons';
@@ -15,19 +14,25 @@ export default function Item({ timestamp, index }) {
   const [speaker, setSpeaker] = React.useState(timestamp[2]);
   const [isPlay, setPlay] = React.useState(false);
 
+  // When the play button is pressed,
   React.useEffect(() => {
     if (isPlay) {
-      // When this start to play
-      setInfo({ index: index, seekTo: start, end: end });
-    } else {
-      // When this pause
-      info.index == index && setInfo({ ...info, index: null })
+      setInfo({ ...info, index: index, seekTo: start, end: end });
     }
   }, [isPlay])
 
   React.useEffect(() => {
     info.index !== index && setPlay(false);
   }, [info.index])
+
+  // *Update the index
+  React.useEffect(() => {
+    if (info.at) {
+      if (info.at >= start && info.at < end && info.index !== index) {
+        setInfo({ ...info, index: index });
+      }
+    }
+  }, [info.at])
 
   const handlePlayPause = () => {
     setPlay(!isPlay);
@@ -62,7 +67,7 @@ export default function Item({ timestamp, index }) {
   }
 
   return (
-    <div className={cn(styles.container, { [styles.selected]: isPlay },)}>
+    <div className={styles.top}>
       <span className={styles.index}>#{index}</span>
       <div className={styles.middle}>
         <div className={styles.info}>

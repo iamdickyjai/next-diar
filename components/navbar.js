@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <div className={styles.container}>
       <div className={styles.title}>Diarization Application</div>
-      <div onClick={testing} className={styles.settingBtn}>Setting</div>
+      {/* <div onClick={testing} className={styles.settingBtn}>Setting</div> */}
     </div>
   )
 }

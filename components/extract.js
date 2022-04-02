@@ -1,22 +1,22 @@
 import React from "react";
+import cn from 'classnames';
 
 import Item from "./item";
-import { DataContext } from "./reducer";
+import styles from '../styles/Item.module.css';
+import { DataContext, PlayContext } from "./reducer";
 
 export default function Extract() {
   const [state, dispatch] = React.useContext(DataContext);
+  const { info, setInfo } = React.useContext(PlayContext);
 
   return (
     <>
-      {state.timestamp.map((ele, index) => <Item key={index} timestamp={ele} index={index} Content={Main} />)}
+      <h1>THis is {state.application}</h1>
+      {state.timestamp.map((ele, index) =>
+        <div className={cn(styles.container, { [styles.selected]: info.index === index },)}>
+          <Item key={index} timestamp={ele} index={index} />
+        </div>
+      )}
     </>
-  )
-}
-
-function Main() {
-  return (
-    <h1>
-      Surprise Mother Fucker
-    </h1>
   )
 }

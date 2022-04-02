@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import cn from 'classnames';
 import React from "react";
 import ReactPlayer from 'react-player';
+import Link from 'next/link';
 
 import { DataContext, PlayContext } from "../../components/reducer";
-import Item from "../../components/item";
 import Subtitle from "../../components/subtitle";
 import Extract from "../../components/extract";
 import Processing from "../../components/processing";
@@ -19,8 +19,9 @@ export default function App() {
   const [playing, setPlaying] = React.useState(false);
   const [info, setInfo] = React.useState({
     index: null,
-    seekTo: 0,
-    end: 0,
+    seekTo: null,
+    end: null,
+    at: null,
   });
   const router = useRouter();
 
@@ -39,20 +40,45 @@ export default function App() {
   })
 
   React.useEffect(() => {
-    if (player.current) {
-      if (info.index !== null) {
-        player.current.seekTo(info.seekTo, 'seconds');
-        setPlaying(true);
-      } else {
-        setPlaying(false);
-      }
+    // An item is clicked
+    if (info.seekTo !== null) {
+      player.current.seekTo(info.seekTo, 'seconds');
+      setInfo({ ...info, seekTo: null });
+      setPlaying(true);
     }
-  }, [info])
+  }, [info.seekTo]);
 
   const handleProgress = (s) => {
-    if (s.playedSeconds > info.end || s.played === 1) {
-      setInfo({ ...info, index: null });
+
+    if (info.end) {
+      if (s.playedSeconds > info.end) {
+        setInfo({ ...info, at: null, end: null, seekTo: null, index: null });
+        setPlaying(false);
+        return;
+      }
     }
+
+    // Make sure progress will not update info if the player is paused
+    if (!playing) {
+      setInfo({ ...info, at: null, });
+      return
+    }
+
+    setInfo({ ...info, at: s.playedSeconds });
+  }
+
+  const handlePlay = () => {
+    setPlaying(true);
+  }
+
+  const handlePause = () => {
+    setPlaying(false)
+    setInfo({ ...info, at: null, });
+  }
+
+  const handleEnded = () => {
+    setPlaying(false);
+    setInfo({ ...info, at: null, index: null });
   }
 
   return (
@@ -68,12 +94,19 @@ export default function App() {
                   playing={playing}
                   ref={player}
                   height='100%' width='100%'
-                  onProgress={handleProgress} />
-
+                  onProgress={handleProgress}
+                  onPlay={handlePlay}
+                  onPause={handlePause}
+                  onEnded={handleEnded} />
               </div>
               <div className={styles.main}>
-                {state.timestamp.map((ele, index) => <Item key={index} timestamp={ele} index={index} />)}
+                {state.application === 'extract' ? <Extract /> :
+                  state.application === 'subtitle' ? <Subtitle /> :
+                    <Processing />}
               </div>
+              <Link href='/'>
+                <a className={styles.goBack}>Go Back</a>
+              </Link>
             </>
           }
 

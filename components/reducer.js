@@ -6,6 +6,7 @@ export const PlayContext = React.createContext();
 
 export const reducers = (state, action) => {
   switch (action.type) {
+    // Switch between file and link
     case 'UPDATE_DIAR':
       let link = null;
       if (action.link) {
@@ -18,6 +19,8 @@ export const reducers = (state, action) => {
         timestamp: action.timestamp,
         link: link,
       };
+
+    // Choosing the application desired 
     case 'UPDATE_SELECTION':
       if (state.application == action.application) {
         return {
@@ -29,6 +32,13 @@ export const reducers = (state, action) => {
           ...state,
           application: action.application,
         }
+      }
+
+    // Include modifying the cluster length and the spkr name
+    case 'UPDATE_TIMESTAMP':
+      return {
+        ...state,
+        timestamp: action.timestamp,
       }
     case 'CLEAR':
       return {
