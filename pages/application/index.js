@@ -3,6 +3,7 @@ import cn from 'classnames';
 import React from "react";
 import ReactPlayer from 'react-player';
 import Link from 'next/link';
+import { Toaster } from "react-hot-toast";
 
 import { DataContext, PlayContext } from "../../components/reducer";
 import Subtitle from "../../components/subtitle";
@@ -15,7 +16,7 @@ export default function App() {
   const [isLoading, setLoading] = React.useState(true);
 
   const player = React.useRef();
-  const url = React.useRef(URL.createObjectURL(state.file));
+  const url = React.useRef(state.file && URL.createObjectURL(state.file));
   const [playing, setPlaying] = React.useState(false);
   const [info, setInfo] = React.useState({
     index: null,
@@ -83,6 +84,7 @@ export default function App() {
 
   return (
     <>
+      <Toaster />
       <PlayContext.Provider value={{ info, setInfo }}>
         <div className={styles.container}>
           {isLoading ? <h1>Loading...</h1> :

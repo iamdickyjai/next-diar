@@ -115,7 +115,7 @@ function FileSelection(props) {
     if (link) {
       if (!isValidHttpUrl(link)) {
         toast.error("That is not a valid Link!", { id: "error", duration: 2000 });
-        return
+        return;
       }
     }
 
@@ -221,6 +221,21 @@ function AppSelection(props) {
       selectHandler(blockArr.find(ele => ele.type == state.application).id)
     }
   }, [])
+
+  React.useEffect(() => {
+    console.log(disabled);
+    if (disabled) {
+      const newArr = [...blockArr];
+      newArr.forEach(ele => ele.check = false);
+
+      setBlock(newArr);
+    } else {
+      const newArr = [...blockArr];
+      newArr.forEach(ele => (ele.type === state.application) && (ele.check = true));
+
+      setBlock(newArr);
+    }
+  }, [disabled])
 
   const selectHandler = (id) => {
     // Get the unselected option, and set them to false

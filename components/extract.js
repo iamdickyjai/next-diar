@@ -1,6 +1,7 @@
 import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
+import toast from "react-hot-toast";
 
 import Item from "./item";
 import styles from '../styles/Item.module.css';
@@ -27,6 +28,8 @@ export default function Extract() {
   }
 
   const handleDownload = async () => {
+    toast.loading("Processing...", { id: "loading" });
+
     const selectedTimestamp = [];
     checked.forEach((ele, index) => {
       if (ele) {
@@ -49,6 +52,7 @@ export default function Extract() {
 
     const zip = await res.blob();
     download(zip, 'result.zip');
+    toast.dismiss(toast.loading("", { id: "loading" }));
   }
 
   return (
@@ -63,7 +67,7 @@ export default function Extract() {
           </label>
         </div>
       )}
-      <button onClick={handleDownload}>Download</button>
+      <button onClick={handleDownload} disabled={!checked.some(ele => ele)}>Download</button>
     </>
   )
 }
