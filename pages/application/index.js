@@ -50,7 +50,7 @@ export default function App() {
 
   const handleProgress = (s) => {
 
-    if (info.end) {
+    if (info.end !== null) {
       if (s.playedSeconds > info.end) {
         setInfo({ ...info, at: null, end: null, seekTo: null, index: null });
         setPlaying(false);

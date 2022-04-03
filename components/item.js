@@ -20,6 +20,12 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   React.useEffect(() => {
     if (isPlay) {
       setInfo({ ...info, index: index, seekTo: start, end: end });
+    } else {
+      if (info.index === index) {
+        // Force the player to stop instantly.
+        setInfo({ ...info, end: 0 });
+
+      }
     }
   }, [isPlay])
 
@@ -88,7 +94,7 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
       <span className={styles.index}>#{index}</span>
       <div className={styles.middle}>
         <div className={styles.info}>
-          <div>Start at {displayDate(start)}, End at {displayDate(end)}</div>
+          <div>Start at {displayDate(start)} End at {displayDate(end)}</div>
           <div>Speak by <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
         </div>
       </div>

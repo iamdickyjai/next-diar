@@ -1,22 +1,69 @@
 import React from "react";
 import cn from 'classnames';
+import download from "downloadjs";
 
 import Item from "./item";
 import styles from '../styles/Item.module.css';
+import styless from '../styles/Extract.module.css';
 import { DataContext, PlayContext } from "./reducer";
 
 export default function Extract() {
   const [state, dispatch] = React.useContext(DataContext);
   const { info, setInfo } = React.useContext(PlayContext);
+  const [checked, setChecked] = React.useState(Array(state.timestamp.length).fill(false));
+
+  const handleChecked = (index) => {
+    const newArr = [...checked];
+    newArr[index] = !newArr[index];
+    setChecked(newArr);
+  }
+
+  const handleSelectAll = () => {
+    setChecked(Array(state.timestamp.length).fill(true));
+  }
+
+  const handleClear = () => {
+    setChecked(Array(state.timestamp.length).fill(false));
+  }
+
+  const handleDownload = async () => {
+    const selectedTimestamp = [];
+    checked.forEach((ele, index) => {
+      if (ele) {
+        selectedTimestamp.push(state.timestamp[index])
+      }
+    })
+
+    const formData = new FormData();
+    formData.append("file", state.file);
+    // formData.append("timestamp", selectedTimestamp);
+    selectedTimestamp.forEach(ele => formData.append("timestamp[]", ele));
+
+    const res = await fetch(`${process.env.url}/download/multiple`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
+    })
+
+    const zip = await res.blob();
+    download(zip, 'result.zip');
+  }
 
   return (
     <>
-      <h1>THis is {state.application}</h1>
+      <button onClick={handleSelectAll}>Select all</button>
+      <button onClick={handleClear}>Clear</button>
       {state.timestamp.map((ele, index) =>
-        <div className={cn(styles.container, { [styles.selected]: info.index === index },)}>
-          <Item key={index} timestamp={ele} index={index} />
+        <div className={styless.record} key={index}>
+          <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
+          <label htmlFor={index} className={cn(styles.container, { [styles.selected]: info.index === index },)}>
+            <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+          </label>
         </div>
       )}
+      <button onClick={handleDownload}>Download</button>
     </>
   )
 }

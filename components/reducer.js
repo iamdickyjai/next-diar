@@ -18,8 +18,6 @@ export const reducers = (state, action) => {
         ele.push(ele[2].toString());
       })
 
-      console.log(newArr);
-
       return {
         ...state,
         file: action.file,

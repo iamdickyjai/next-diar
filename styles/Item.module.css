@@ -57,15 +57,10 @@
   border: none;
   color: #564d3f;
   border-bottom: 0.1rem solid #564d3f;
-  padding: 0;
-}
-
-.info .time {
-  /* width: 30px; */
 }
 
 .info .spkr {
-  width: 200px;
+  width: 150px;
 }
 
 .info input:focus {
