@@ -16,3 +16,31 @@
   width: 100%;
   padding: 55px auto;
 }
+
+/* .spkrContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.spkrBlk {
+  background-color: #918e41;
+  display: inline-block;
+  padding: 15px 20px;
+  margin: 25px;
+
+  border-radius: 25px;
+  box-shadow: inset 0px 0px 7px #353d05;
+
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.spkrBlk>input {
+  font-size: 1.25rem;
+  width: 150px;
+  background-color: #e6e26900;
+  border: none;
+  padding: 7px 8px;
+} */

@@ -13,6 +13,13 @@ export const reducers = (state, action) => {
         link = action.link;
       }
 
+      const newArr = action.timestamp;
+      newArr.forEach(ele => {
+        ele.push(ele[2].toString());
+      })
+
+      console.log(newArr);
+
       return {
         ...state,
         file: action.file,

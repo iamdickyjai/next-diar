@@ -17,13 +17,12 @@ export default function Subtitle() {
       let hour = Math.floor(sec / 3600)
       let minute = Math.floor((sec % 3600) / 60)
       let second = Math.floor(sec % 60)
-      let ms = (sec * 1000) - (Math.floor(sec) * 1000)
+      let ms = Math.floor(sec * 1000) - (Math.floor(sec) * 1000)
       return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')},${ms.toString().padStart(3, '0')}`
     } else {
       let hour = Math.floor(sec / 3600)
       let minute = Math.floor((sec % 3600) / 60)
       let second = Math.floor(sec % 60)
-      let ms = (sec * 1000) - (Math.floor(sec) * 1000)
       if (sec >= 3600) {
         return `${hour}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
       } else if (sec >= 60) {
@@ -46,7 +45,7 @@ export default function Subtitle() {
       subtitles.forEach((ele, index) => {
         const start = toDate(state.timestamp[index][0], 'standard');
         const end = toDate(state.timestamp[index][1], 'standard')
-        const spkr = state.timestamp[index][2];
+        const spkr = state.timestamp[index][3];
         output.push(index + '\n');
         output.push(`${start} --> ${end}\n`)
         output.push(ele ? (spkr + " said: " + ele + '\n') : '\n');
@@ -62,7 +61,7 @@ export default function Subtitle() {
       const output = [];
       subtitles.forEach((ele, index) => {
         const start = toDate(state.timestamp[index][0], 'short');
-        const spkr = state.timestamp[index][2];
+        const spkr = state.timestamp[index][3];
         if (ele) {
           output.push(`at ${start}, ${spkr} said: ${ele}\n`);
           output.push('\n');
@@ -76,10 +75,9 @@ export default function Subtitle() {
 
   return (
     <>
-      <h1>THis is {state.application}</h1>
       {state.timestamp.map((ele, index) =>
-        <div className={cn(styles.container, { [styles.selected]: info.index === index },)}>
-          <Item key={index} timestamp={ele} index={index} />
+        <div key={index} className={cn(styles.container, { [styles.selected]: info.index === index },)}>
+          <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
           <input className={styles.input} type='text'
             placeholder="Type your script or comment here"
             onChange={(event) => handleInput(event, index)} />

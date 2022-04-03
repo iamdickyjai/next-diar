@@ -4,14 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay, faCirclePause } from '@fortawesome/free-solid-svg-icons';
 
 import styles from '../styles/Item.module.css';
-import { PlayContext } from './reducer';
+import { DataContext, PlayContext } from './reducer';
 
-export default function Item({ timestamp, index }) {
+export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   const { info, setInfo } = React.useContext(PlayContext);
+  const [state, dispatch] = React.useContext(DataContext);
 
-  const [start, setStart] = React.useState(timestamp[0]);
-  const [end, setEnd] = React.useState(timestamp[1]);
-  const [speaker, setSpeaker] = React.useState(timestamp[2]);
+  const [start, setStart] = React.useState(startTime);
+
+  const [end, setEnd] = React.useState(endTime);
+  const [speaker, setSpeaker] = React.useState(spkrName);
   const [isPlay, setPlay] = React.useState(false);
 
   // When the play button is pressed,
@@ -33,6 +35,21 @@ export default function Item({ timestamp, index }) {
       }
     }
   }, [info.at])
+
+  React.useEffect(() => {
+    setSpeaker(spkrName);
+  }, [spkrName])
+
+  const handleSpkrChange = (event) => {
+    setSpeaker(event.target.value);
+  }
+
+  const handleSpkrBlur = () => {
+    const newArr = state.timestamp;
+    newArr.forEach(ele => ele[2] === spkrId && (ele[3] = speaker));
+
+    dispatch({ type: 'UPDATE_TIMESTAMP', timestamp: newArr });
+  }
 
   const handlePlayPause = () => {
     setPlay(!isPlay);
@@ -71,8 +88,8 @@ export default function Item({ timestamp, index }) {
       <span className={styles.index}>#{index}</span>
       <div className={styles.middle}>
         <div className={styles.info}>
-          <div>Start at: {displayDate(start)} End at {displayDate(end)}</div>
-          <div>Speak by {speaker}</div>
+          <div>Start at {displayDate(start)}, End at {displayDate(end)}</div>
+          <div>Speak by <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
         </div>
       </div>
       {isPlay ? <FontAwesomeIcon icon={faCirclePause} className={styles.play} onClick={handlePlayPause} /> :
