@@ -2,6 +2,8 @@ import React from 'react';
 import cn from 'classnames';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 import styles from '../styles/Home.module.css';
 import { DataContext } from '../components/reducer';
@@ -65,6 +67,10 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Toaster />
+      <p className={styles.introduction}>
+        This application is a diarization demonstration.
+        To begin, submit a file or a YouTube link
+      </p>
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
       {isDone &&
@@ -204,16 +210,20 @@ function AppSelection(props) {
   const [blockArr, setBlock] = React.useState([
     {
       type: "extract", id: 0, check: false,
-      description: ["Firest"]
+      description: [["Automated audio extraction",],
+      ["Download files", <FontAwesomeIcon icon={faCheck} />]],
     },
     {
-      type: "subtitle", id: 1, check: false,
-      description: ["assadas", "asdasdas"]
+      type: "label", id: 1, check: false,
+      description: [["Audio labelling",],
+      ["Subtitling", <FontAwesomeIcon icon={faCheck} />],
+      ["Script Generation", <FontAwesomeIcon icon={faCheck} />],
+      ["Commenting", <FontAwesomeIcon icon={faCheck} />],]
     },
-    {
-      type: "processing", id: 2, check: false,
-      description: ["..."]
-    },
+    // {
+    //   type: "processing", id: 2, check: false,
+    //   description: ["..."]
+    // },
   ]);
 
   React.useEffect(() => {
@@ -223,7 +233,6 @@ function AppSelection(props) {
   }, [])
 
   React.useEffect(() => {
-    console.log(disabled);
     if (disabled) {
       const newArr = [...blockArr];
       newArr.forEach(ele => ele.check = false);
@@ -286,7 +295,7 @@ function SelectBlock(props) {
       onClick={() => Click()}
     >
       <h1>{type.charAt(0).toUpperCase() + type.slice(1)}</h1>
-      {description.map((ele, index) => <li key={index}>{ele}</li>)}
+      {description.map((ele, index) => <li className={styles.appDescription} key={index}>{ele[0]} {ele[1]}</li>)}
     </div>
   )
 }

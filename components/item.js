@@ -91,11 +91,11 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
 
   return (
     <div className={styles.top}>
-      <span className={styles.index}>#{index}</span>
+      <span className={styles.index}>#{index + 1}</span>
       <div className={styles.middle}>
         <div className={styles.info}>
           <div>Start at {displayDate(start)} End at {displayDate(end)}</div>
-          <div>Speak by <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
+          <div>Speaked by <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
         </div>
       </div>
       {isPlay ? <FontAwesomeIcon icon={faCirclePause} className={styles.play} onClick={handlePlayPause} /> :

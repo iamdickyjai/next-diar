@@ -38,7 +38,7 @@ export default function App() {
     }
 
     setLoading(false);
-  })
+  }, [state.file, state.link, state.timestamp])
 
   React.useEffect(() => {
     // An item is clicked
@@ -103,7 +103,7 @@ export default function App() {
               </div>
               <div className={styles.main}>
                 {state.application === 'extract' ? <Extract /> :
-                  state.application === 'subtitle' ? <Subtitle /> :
+                  state.application === 'label' ? <Subtitle /> :
                     <Processing />}
               </div>
               <Link href='/'>

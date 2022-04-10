@@ -4,6 +4,13 @@
   align-items: center;
 }
 
+.introduction {
+  font-size: 2rem;
+  color: rgb(137, 128, 100);
+  text-align: center;
+  width: 90%;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
@@ -13,18 +20,24 @@
   max-width: 50%;
   padding: 15px 20px;
   background-color: #4e542c;
-  margin-top: 3rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   color: #14140a;
   border-radius: 8px;
   box-shadow: inset 0px 0px 4px #000000;
 
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently */
 }
 
 .inputUrl {
@@ -53,15 +66,30 @@
   background-color: #918e41;
   box-shadow: inset 0px 0px 10px #000000;
   padding: 15px;
-  margin:  15px;
+  margin: 15px;
 
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.appDescription {
+  font-family: 'Open Sans', sans-serif;
+  color: #463927;
+  font-size: 1.5rem;
+  text-align: justify;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .popupBtn {
@@ -73,8 +101,13 @@
 }
 
 @keyframes popup {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .disabled {
