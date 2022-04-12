@@ -4,11 +4,17 @@
   align-items: center;
 }
 
-.introduction {
+.instruction {
   font-size: 2rem;
   color: rgb(137, 128, 100);
   text-align: center;
   width: 90%;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.instruction>div {
+  margin: 5px;
 }
 
 .inputContainer {

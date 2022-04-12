@@ -20,7 +20,7 @@ export default function Home() {
   React.useEffect(() => {
     let toastId;
     if (isAllow) {
-      toastId = toast.loading("Processing...", { id: "loading" });
+      toastId = toast.loading("Processing, Please wait...", { id: "loading" });
     } else {
       toast.dismiss(toast.loading("", { id: "loading" }));
     }
@@ -67,10 +67,10 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Toaster />
-      <p className={styles.introduction}>
-        This application is a diarization demonstration.
-        To begin, submit a file or a YouTube link
-      </p>
+      <div className={styles.instruction}>
+        <div>This application help you to find out "Who Spoke When"</div>
+        <div>To begin, submit a file or a YouTube link</div>
+      </div>
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
       {isDone &&
@@ -211,14 +211,14 @@ function AppSelection(props) {
     {
       type: "extract", id: 0, check: false,
       description: [["Automated audio extraction",],
-      ["Download files", <FontAwesomeIcon icon={faCheck} />]],
+      ["Download files", <FontAwesomeIcon icon={faCheck} key={"e_2"} />]],
     },
     {
       type: "label", id: 1, check: false,
       description: [["Audio labelling",],
-      ["Subtitling", <FontAwesomeIcon icon={faCheck} />],
-      ["Script Generation", <FontAwesomeIcon icon={faCheck} />],
-      ["Commenting", <FontAwesomeIcon icon={faCheck} />],]
+      ["Subtitling", <FontAwesomeIcon icon={faCheck} key={"l_2"} />],
+      ["Script Generation", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],
+      ["Commenting", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],]
     },
     // {
     //   type: "processing", id: 2, check: false,

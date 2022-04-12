@@ -1,4 +1,4 @@
-.container{
+.container {
   display: flex;
   flex-direction: row;
   font-size: 3rem;
@@ -6,26 +6,34 @@
   align-items: flex-end;
 }
 
-.title{
+.title {
   color: #ffc83d;
-  text-shadow: 0px 0px 7px #ebaa05;
+  text-shadow: 2px 4px 10px #ebaa05;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
 }
 
-.settingBtn{
+.settingBtn {
   font-size: 2rem;
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
-.settingBtn:hover{
+.settingBtn:hover {
   color: rgb(255, 199, 146);
 }
 
-.settingBtn:active{
-  color:aquamarine;
+.settingBtn:active {
+  color: aquamarine;
 }

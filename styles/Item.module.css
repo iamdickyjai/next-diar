@@ -67,8 +67,12 @@
   outline: none;
 }
 
+.spkrIcon {
+  margin-right: 0.5rem;
+}
+
 .play {
-  width: 10%;
+  width: 8%;
   font-size: 50px;
   /* background-color: azure; */
 }

@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlay, faCirclePause } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlay, faCirclePause, faHeadset } from '@fortawesome/free-solid-svg-icons';
 
 import styles from '../styles/Item.module.css';
 import { DataContext, PlayContext } from './reducer';
+import toast from 'react-hot-toast';
 
 export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   const { info, setInfo } = React.useContext(PlayContext);
@@ -13,7 +14,8 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   const [start, setStart] = React.useState(startTime);
 
   const [end, setEnd] = React.useState(endTime);
-  const [speaker, setSpeaker] = React.useState(spkrName);
+  const [speaker, setSpeaker] = React.useState();
+  const prevSpkr = React.useRef();
   const [isPlay, setPlay] = React.useState(false);
 
   // When the play button is pressed,
@@ -43,18 +45,32 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   }, [info.at])
 
   React.useEffect(() => {
-    setSpeaker(spkrName);
+    setSpeaker(spkrName)
   }, [spkrName])
 
   const handleSpkrChange = (event) => {
-    setSpeaker(event.target.value);
+    setSpeaker(event.target.value)
   }
 
-  const handleSpkrBlur = () => {
-    const newArr = state.timestamp;
-    newArr.forEach(ele => ele[2] === spkrId && (ele[3] = speaker));
+  const handleSpkrBlur = (event) => {
+    // Validate if the speaker conflict with other first
+    const name = (ele) => ele[2] === spkrId ? true : ele[3] !== speaker;
+    const validate = state.timestamp.every(name)
 
-    dispatch({ type: 'UPDATE_TIMESTAMP', timestamp: newArr });
+    if (validate) {
+      const newArr = state.timestamp;
+      newArr.forEach(ele => ele[2] === spkrId && (ele[3] = speaker));
+
+      if (speaker !== undefined) {
+        prevSpkr.current = speaker;
+      }
+
+      dispatch({ type: 'UPDATE_TIMESTAMP', timestamp: newArr });
+    } else {
+      toast.error("Speaker Conflicted!", { duration: 1000 });
+      setSpeaker(prevSpkr.current);
+      event.target.focus();
+    }
   }
 
   const handlePlayPause = () => {
@@ -62,31 +78,22 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   }
 
   const toDate = (sec) => {
-    if (sec < 60) {
-      return [sec]
-    }
-    if (sec < 3600) {
-      let second = Math.round(sec % 60 * 100) / 100
-      let minute = Math.floor(sec / 60)
-      return [second, minute]
-    }
-
-    let hour = Math.floor(sec / 3600)
-    let minute = Math.floor((sec % 3600) / 60)
-    let second = Math.round(sec % 60 * 100) / 100
-    return [second, minute, hour]
+    let millisecond = Math.round((sec - Math.floor(sec)) * 100)
+    let second = Math.floor(sec % 60);
+    let minute = Math.floor(sec / 60);
+    return [millisecond, second, minute]
   }
 
   const displayDate = (sec) => {
     const arr = toDate(sec)
 
-    if (arr.length === 1) {
-      return `0:${sec.toString().padStart(2, '0')}`
-    } else if (arr.length === 2) {
-      return `${arr[1].toString().padStart(2, '0')}:${arr[0].toString().padStart(2, '0')}`
-    } else {
-      return `${arr[2].toString().padStart(2, '0')}:${arr[1].toString().padStart(2, '0')}:${arr[0].toString().padStart(2, '0')}`
-    }
+    const ms = arr[0];
+    const s = arr[1];
+    const min = arr[2];
+
+    return `${min}:${s.toString().padStart(2, '0')},${ms.toString().padStart(2, '0')}`;
+
+    // return `0:${sec.toString().padStart(2, '0')}`
   }
 
   return (
@@ -95,7 +102,9 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
       <div className={styles.middle}>
         <div className={styles.info}>
           <div>Start at {displayDate(start)} End at {displayDate(end)}</div>
-          <div>Speaked by <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
+          <div>
+            <FontAwesomeIcon icon={faHeadset} className={styles.spkrIcon} />
+            <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
         </div>
       </div>
       {isPlay ? <FontAwesomeIcon icon={faCirclePause} className={styles.play} onClick={handlePlayPause} /> :
