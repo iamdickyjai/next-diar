@@ -85,6 +85,7 @@ export default function Home() {
 function FileSelection(props) {
   const [link, setLink] = React.useState("");
   const fileRef = React.createRef();
+  const vad = React.useRef();
   const [isFile, setDecision] = React.useState(false);
   const [state, dispatch] = React.useContext(DataContext);
 
@@ -157,6 +158,7 @@ function FileSelection(props) {
 
       const formData = new FormData();
       formData.append("file", audio);
+      formData.append("vad", vad.current.checked);
 
       const response = await fetch(process.env.url, {
         method: "POST",
@@ -198,8 +200,11 @@ function FileSelection(props) {
   return (
     <div className={cn(styles.inputContainer, { [styles.disabled]: disabled })}>
       <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink} />
-      <span>or</span>
-      <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />
+      <span style={{ 'font-size': '24px' }}>or</span>
+      <div>
+        <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />
+        <label className={styles.inputOption}><input type="checkbox" ref={vad} />Apply VAD</label>
+      </div>
       <button onClick={submit}>Go</button>
     </div>
   )
