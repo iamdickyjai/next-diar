@@ -6,10 +6,9 @@ body {
   padding: 0;
   margin: 0;
   background-color: #14140a;
-  color: #564d3f;
+  color: #3b352c;
   font-family: 'Montserrat', sans-serif;
 }
-
 
 a {
   color: inherit;
@@ -27,8 +26,8 @@ button {
   border: none;
   padding: 5px 20px;
   margin: 10px;
-  background-color: #918e41;
-  color: #14140a;
+  background-color: #baa973;
+  color: #000000;
   border-radius: 5px;
   transition: transform 0.05s;
 }
@@ -45,4 +44,14 @@ button:active {
 button:disabled {
   opacity: 0.4;
   pointer-events: none;
+}
+
+input[type=text] {
+  background-color: #d7d2a4;
+  border: none;
+
+  font-size: 1.25rem;
+  color: #564d3f;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
 }

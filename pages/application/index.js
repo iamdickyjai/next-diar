@@ -106,9 +106,9 @@ export default function App() {
                   state.application === 'label' ? <Subtitle /> :
                     <Processing />}
               </div>
-              <Link href='/'>
-                <a className={styles.goBack}>Go Back</a>
-              </Link>
+              <button onClick={() => router.push('/')} className={styles.goBack}>
+                Go Back
+              </button>
             </>
           }
 

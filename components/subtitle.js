@@ -84,10 +84,10 @@ export default function Subtitle() {
         </div>
       )}
       <div className={styless.footer}>
-        <h1>Export</h1>
+        <span className={styless.export}>Export</span>
         <div className={styless.formatOption}>
-          <button className={styless.btn} onClick={() => handleExport('srt')}>Subtitling? (.srt)</button>
-          <button className={styless.btn} onClick={() => handleExport('txt')}>Commenting? (.txt)</button>
+          <button className={styless.btn} onClick={() => handleExport('srt')}>Subtitle? (.srt)</button>
+          <button className={styless.btn} onClick={() => handleExport('txt')}>Label or comment? (.txt)</button>
         </div>
       </div>
     </>

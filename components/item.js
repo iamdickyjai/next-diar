@@ -104,6 +104,7 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
           <div>Start at {displayDate(start)} End at {displayDate(end)}</div>
           <div>
             <FontAwesomeIcon icon={faHeadset} className={styles.spkrIcon} />
+            Speaker&nbsp;
             <input type='text' value={speaker} onChange={handleSpkrChange} onBlur={handleSpkrBlur} className={styles.spkr} /></div>
         </div>
       </div>

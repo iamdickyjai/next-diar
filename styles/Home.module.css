@@ -17,15 +17,21 @@
   margin: 5px;
 }
 
+.reminder {
+  font-size: 1rem;
+  color: rgba(137, 128, 100, 0.854);
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   min-width: 300px;
+  width: 500px;
   max-width: 50%;
   padding: 15px 20px;
-  background-color: #4e542c;
+  background-color: #8d825e;
   margin-top: 1rem;
   margin-bottom: 1rem;
   color: #14140a;
@@ -48,12 +54,8 @@
 
 .inputUrl {
   width: 100%;
-  border: none;
   padding: 5px 10px;
-  font-family: 'Montserrat', sans-serif;
-  background-color: #cbda744d;
-  font-size: 16px;
-  color: white;
+  margin-top: 8px;
 }
 
 .selectionArea {
@@ -63,16 +65,15 @@
   justify-content: space-evenly;
 }
 
-
 .block {
   flex-grow: 1;
   flex-basis: 0;
   min-height: 200px;
   border-radius: 15px;
-  background-color: #918e41;
+  background-color: #8d825e;
   box-shadow: inset 0px 0px 10px #000000;
-  padding: 15px;
-  margin: 15px;
+  padding: 1.5rem;
+  margin: 1rem;
 
   -webkit-touch-callout: none;
   /* iOS Safari */
@@ -87,6 +88,11 @@
   user-select: none;
   /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.blockTitle {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .appDescription {
@@ -123,5 +129,5 @@
 
 .selected {
   background-color: #ffc83d;
-  box-shadow: 0px 0px 25px #ebaa05;
+  box-shadow: 0px 0px 25px #e4b232;
 }

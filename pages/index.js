@@ -68,9 +68,10 @@ export default function Home() {
     <div className={styles.container}>
       <Toaster />
       <div className={styles.instruction}>
-        <div>This application help you to find out "Who Spoke When"</div>
+        <div>This application help you to label speaker identities in a conversation</div>
         <div>To begin, submit a file or a YouTube link</div>
       </div>
+      <div className={styles.reminder}><i>*Better performance without background music</i></div>
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
       {isDone &&
@@ -294,7 +295,7 @@ function SelectBlock(props) {
       className={cn(styles.block, { [styles.selected]: check }, { [styles.disabled]: disabled })}
       onClick={() => Click()}
     >
-      <h1>{type.charAt(0).toUpperCase() + type.slice(1)}</h1>
+      <div className={styles.blockTitle}>{type.charAt(0).toUpperCase() + type.slice(1)}</div>
       {description.map((ele, index) => <li className={styles.appDescription} key={index}>{ele[0]} {ele[1]}</li>)}
     </div>
   )
