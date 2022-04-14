@@ -1,0 +1,59 @@
+.largerBtnGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter {
+  position: relative;
+  display: inline-block;
+  color: #baa973;
+  font-size: 1.5rem;
+}
+
+.filter .toolTip {
+  /* display properties */
+  visibility: hidden;
+  z-index: 1;
+  background-color: #d3b260;
+  border-radius: 6px;
+
+  /* text propeties */
+  width: 10rem;
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+  text-align: center;
+
+  /* position properties */
+  position: absolute;
+  margin-left: -5rem;
+  bottom: 150%;
+  left: 45%;
+}
+
+.filter .toolTip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #d3b260 transparent transparent transparent;
+}
+
+.filter:hover .toolTip {
+  visibility: visible;
+}
+
+.optionBtn {
+  margin: 2rem 0px;
+}
+
+.optionBtnGroup {
+  display: grid;
+  grid-template-columns: 125px 125px;
+  gap: 1rem;
+}

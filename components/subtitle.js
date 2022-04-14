@@ -2,8 +2,12 @@ import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 import Item from "./item";
+import Option from "./option";
+import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Subtitle.module.css';
 import { DataContext, PlayContext } from "./reducer";
@@ -142,11 +146,8 @@ export default function Subtitle() {
 
   return (
     <>
-      <button onClick={handleRequest} disabled={asrBtnDisabled}
-        className={styles.optionBtn}>
-        Speech-to-text (experimental with English only)
-      </button>
-      <div className={styles.itemContainer}>
+      <Option handleRequest={handleRequest} asrBtnDisabled={asrBtnDisabled} />
+      <div className={appWrapper.itemContainer}>
         {state.timestamp.map((ele, index) =>
           <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
             <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />

@@ -2,8 +2,12 @@ import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 import Item from "./item";
+import Option from "./option";
+import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Extract.module.css';
 import { DataContext, PlayContext } from "./reducer";
@@ -57,11 +61,8 @@ export default function Extract() {
 
   return (
     <>
-      <div className={styles.optionBtnGroup}>
-        <button onClick={handleSelectAll} className={styles.optionBtn}>Select all</button>
-        <button onClick={handleClear} className={styles.optionBtn}>Clear</button>
-      </div>
-      <div className={styles.itemContainer}>
+      <Option handleSelectAll={handleSelectAll} handleClear={handleClear} />
+      <div className={appWrapper.itemContainer}>
         {state.timestamp.map((ele, index) =>
           <div className={styless.record} key={index}>
             <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
@@ -72,7 +73,7 @@ export default function Extract() {
         )}
       </div>
       <button onClick={handleDownload} disabled={!checked.some(ele => ele)}
-        className={styles.optionBtn}>
+        className={styless.dlBtn}>
         Download
       </button>
     </>

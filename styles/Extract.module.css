@@ -4,5 +4,9 @@
   align-items: center;
 }
 
+.dlBtn {
+  margin: 2rem 0px;
+}
+
 /* TODO */
 .checkBox {}
