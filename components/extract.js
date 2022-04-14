@@ -16,6 +16,7 @@ export default function Extract() {
   const [state, dispatch] = React.useContext(DataContext);
   const { info, setInfo } = React.useContext(PlayContext);
   const [checked, setChecked] = React.useState(Array(state.timestamp.length).fill(false));
+  const [isFilter, setFilter] = React.useState(false);
 
   const handleChecked = (index) => {
     const newArr = [...checked];
@@ -29,6 +30,10 @@ export default function Extract() {
 
   const handleClear = () => {
     setChecked(Array(state.timestamp.length).fill(false));
+  }
+
+  const handleFilter = () => {
+    setFilter(!isFilter);
   }
 
   const handleDownload = async () => {
@@ -61,16 +66,21 @@ export default function Extract() {
 
   return (
     <>
-      <Option handleSelectAll={handleSelectAll} handleClear={handleClear} />
+      <Option handleSelectAll={handleSelectAll} handleClear={handleClear} handleFilter={handleFilter}
+        isFilter={isFilter} />
       <div className={appWrapper.itemContainer}>
-        {state.timestamp.map((ele, index) =>
-          <div className={styless.record} key={index}>
-            <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
-            <label htmlFor={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
-              <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-            </label>
-          </div>
-        )}
+        {state.timestamp.map((ele, index) => {
+          if (!isFilter || (isFilter && ele[1] - ele[0] > 3)) {
+            return (
+              <div className={styless.record} key={index}>
+                <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
+                <label htmlFor={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+                  <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+                </label>
+              </div>
+            )
+          }
+        })}
       </div>
       <button onClick={handleDownload} disabled={!checked.some(ele => ele)}
         className={styless.dlBtn}>

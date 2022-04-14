@@ -2,8 +2,6 @@ import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 import Item from "./item";
 import Option from "./option";
@@ -17,6 +15,7 @@ export default function Subtitle() {
   const { info, setInfo } = React.useContext(PlayContext);
   const [subtitles, setSubtitle] = React.useState(Array(state.timestamp.length).fill(''));
   const [asrBtnDisabled, setAsrBtn] = React.useState(false);
+  const [isFilter, setFilter] = React.useState(false);
 
   const toDate = (sec, type) => {
     if (type === 'standard') {
@@ -101,6 +100,10 @@ export default function Subtitle() {
     }
   }
 
+  const handleFilter = () => {
+    setFilter(!isFilter);
+  }
+
   const handleInput = (event, index) => {
     const newArr = [];
     subtitles.forEach((ele, index) => {
@@ -146,17 +149,22 @@ export default function Subtitle() {
 
   return (
     <>
-      <Option handleRequest={handleRequest} asrBtnDisabled={asrBtnDisabled} />
+      <Option handleRequest={handleRequest} handleFilter={handleFilter}
+        asrBtnDisabled={asrBtnDisabled} isFilter={isFilter} />
       <div className={appWrapper.itemContainer}>
-        {state.timestamp.map((ele, index) =>
-          <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
-            <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-            <input className={styles.input} type='text'
-              placeholder="Type your script or comment here"
-              onChange={(event) => handleInput(event, index)}
-              value={subtitles[index]} />
-          </div>
-        )}
+        {state.timestamp.map((ele, index) => {
+          if (!isFilter || (isFilter && ele[1] - ele[0] > 3)) {
+            return (
+              <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+                <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+                <input className={styles.input} type='text'
+                  placeholder="Type your script or comment here"
+                  onChange={(event) => handleInput(event, index)}
+                  value={subtitles[index]} />
+              </div>
+            )
+          }
+        })}
       </div>
       <div className={styless.footer}>
         <span className={styless.export}>Export</span>
