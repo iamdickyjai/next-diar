@@ -142,19 +142,21 @@ export default function Subtitle() {
 
   return (
     <>
-      <button className={styless.asrBtn} onClick={handleRequest}
-        disabled={asrBtnDisabled}>
+      <button onClick={handleRequest} disabled={asrBtnDisabled}
+        className={styles.optionBtn}>
         Speech-to-text (experimental with English only)
       </button>
-      {state.timestamp.map((ele, index) =>
-        <div key={index} className={cn(styles.container, { [styles.selected]: info.index === index },)}>
-          <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-          <input className={styles.input} type='text'
-            placeholder="Type your script or comment here"
-            onChange={(event) => handleInput(event, index)}
-            value={subtitles[index]} />
-        </div>
-      )}
+      <div className={styles.itemContainer}>
+        {state.timestamp.map((ele, index) =>
+          <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+            <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+            <input className={styles.input} type='text'
+              placeholder="Type your script or comment here"
+              onChange={(event) => handleInput(event, index)}
+              value={subtitles[index]} />
+          </div>
+        )}
+      </div>
       <div className={styless.footer}>
         <span className={styless.export}>Export</span>
         <div className={styless.formatOption}>

@@ -219,7 +219,8 @@ function FileSelection(props) {
 
   return (
     <div className={cn(styles.inputContainer, { [styles.disabled]: disabled })}>
-      <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink} />
+      <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink}
+        placeholder="YouTube link here" />
       <span style={{ 'font-size': '24px' }}>or</span>
       <div>
         <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />

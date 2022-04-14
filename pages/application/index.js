@@ -49,6 +49,7 @@ export default function App() {
     }
   }, [info.seekTo]);
 
+  //#region Handle actions related to the audio player
   const handleProgress = (s) => {
 
     if (info.end !== null) {
@@ -81,6 +82,7 @@ export default function App() {
     setPlaying(false);
     setInfo({ ...info, at: null, index: null });
   }
+  //#endregion
 
   return (
     <>

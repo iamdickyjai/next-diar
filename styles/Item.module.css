@@ -1,9 +1,19 @@
-.container {
+.optionBtn {
+  margin: 2rem 1rem;
+}
+
+.itemContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.wrapper {
   background-color: #8d825e;
   display: flex;
   border-radius: 8px;
   box-shadow: inset 0px 0px 5px #3d3405;
-  margin: 2rem 1.25rem;
+  /* margin: 2rem 1.25rem; */
   padding: 20px 18px 20px 18px;
 
   flex-direction: column;
@@ -81,8 +91,4 @@
   padding: 12px;
   margin-top: 1.5rem;
   width: 95%;
-}
-
-.input::placeholder {
-  opacity: 0.5;
 }

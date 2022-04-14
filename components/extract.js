@@ -57,17 +57,22 @@ export default function Extract() {
 
   return (
     <>
-      <button onClick={handleSelectAll}>Select all</button>
-      <button onClick={handleClear}>Clear</button>
-      {state.timestamp.map((ele, index) =>
-        <div className={styless.record} key={index}>
-          <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
-          <label htmlFor={index} className={cn(styles.container, { [styles.selected]: info.index === index },)}>
-            <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-          </label>
-        </div>
-      )}
-      <button onClick={handleDownload} disabled={!checked.some(ele => ele)}>Download</button>
+      <button onClick={handleSelectAll} className={styles.optionBtn}>Select all</button>
+      <button onClick={handleClear} className={styles.optionBtn}>Clear</button>
+      <div className={styles.itemContainer}>
+        {state.timestamp.map((ele, index) =>
+          <div className={styless.record} key={index}>
+            <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
+            <label htmlFor={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+              <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+            </label>
+          </div>
+        )}
+      </div>
+      <button onClick={handleDownload} disabled={!checked.some(ele => ele)}
+        className={styles.optionBtn}>
+        Download
+      </button>
     </>
   )
 }
