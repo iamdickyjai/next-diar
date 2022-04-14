@@ -48,10 +48,19 @@ button:disabled {
 
 input[type=text] {
   background-color: #d7d2a4;
-  border: none;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #d7da664a;
+  border-radius: 4px;
 
   font-size: 1.25rem;
   color: #564d3f;
   font-weight: 700;
   font-family: 'Montserrat', sans-serif;
+}
+
+input[type=text]:focus {
+  outline-style: solid;
+  outline-color: #f9b41468;
+  outline-width: 2px;
 }

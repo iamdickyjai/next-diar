@@ -1,3 +1,9 @@
+.asrBtn {
+  /* padding: 0; */
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
 .footer {
   display: flex;
   flex-direction: column;

@@ -58,13 +58,17 @@
   margin-top: 8px;
 }
 
+.Input:active {
+  border-color: #e4b232;
+}
+
 .inputOption {
   font-family: 'Open Sans', sans-serif;
   font-size: 1.25rem;
 }
 
 .selectionArea {
-  width: 70%;
+  width: 85%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -104,17 +108,41 @@
   font-family: 'Open Sans', sans-serif;
   color: #463927;
   font-size: 1.5rem;
-  text-align: justify;
+  text-align: left;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
-.popupBtn {
+.popupContainer {
   animation-name: popup;
   animation-duration: 2s;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
-  position: relative;
+
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+}
+
+.popupContainer>span {
+  grid-column: 1 / 3;
+  color: rgb(137, 128, 100);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.popupContainer>span:hover {
+  color: #ffc83d;
+  text-shadow: 1px 1px 2px #ebaa05;
+}
+
+.popupContainer>button {
+  width: 100px;
+  padding: 5px 20px;
+  margin: 5px;
+  display: inline-block;
 }
 
 @keyframes popup {

@@ -1,6 +1,7 @@
 import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
+import toast from "react-hot-toast";
 
 import Item from "./item";
 import styles from '../styles/Item.module.css';
@@ -11,6 +12,7 @@ export default function Subtitle() {
   const [state, dispatch] = React.useContext(DataContext);
   const { info, setInfo } = React.useContext(PlayContext);
   const [subtitles, setSubtitle] = React.useState(Array(state.timestamp.length).fill(''));
+  const [asrBtnDisabled, setAsrBtn] = React.useState(false);
 
   const toDate = (sec, type) => {
     if (type === 'standard') {
@@ -33,8 +35,73 @@ export default function Subtitle() {
     }
   }
 
+  const handleRequest = async () => {
+    const timestamps = state.timestamp;
+    const audio = state.file;
+
+    try {
+      toast.loading("Processing...", { id: "loading" });
+      setAsrBtn(true);
+
+      const formData = new FormData();
+      formData.append("file", audio);
+      formData.append("timestamps", state.timestamp);
+
+      const response = await fetch(process.env.url + '/asr', {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+
+      // Wait for response
+      // Success: return result
+      // Failed: show error and enable inputSelection again.
+      const result = await response.json();
+      toast.dismiss(toast.loading("", { id: "loading" }));
+
+      if (response.status == 200) {
+        const newArr = [];
+        const isNull = true;
+        result.result.forEach((ele, index) => {
+          if (ele[0] === "") {
+            newArr.push(subtitles[index]);
+          } else {
+            isNull = false;
+            newArr.push(ele[0])
+          }
+        })
+        if (isNull) {
+          toast.error("Server do not receive any transcript!", { duration: 1000 });
+        } else {
+          toast.success("Updated!", { duration: 1000 })
+        }
+        setSubtitle(newArr);
+      } else {
+        switch (response.status) {
+          case 500:
+            toast.error("Server error occured", { id: "error", duration: 2000 });
+            break;
+          default:
+            toast.error(`Error ${response.status}`, { id: "error", duration: 2000 });
+            break;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.dismiss(toast.loading("", { id: "loading" }));
+      toast.error("Unexpected error occurred, please try again later.", { id: 'error' });
+    } finally {
+      setAsrBtn(false);
+    }
+  }
+
   const handleInput = (event, index) => {
-    const newArr = subtitles;
+    const newArr = [];
+    subtitles.forEach((ele, index) => {
+      newArr[index] = ele;
+    });
     newArr[index] = event.target.value;
     setSubtitle(newArr);
   }
@@ -75,12 +142,17 @@ export default function Subtitle() {
 
   return (
     <>
+      <button className={styless.asrBtn} onClick={handleRequest}
+        disabled={asrBtnDisabled}>
+        Speech-to-text (experimental with English only)
+      </button>
       {state.timestamp.map((ele, index) =>
         <div key={index} className={cn(styles.container, { [styles.selected]: info.index === index },)}>
           <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
           <input className={styles.input} type='text'
             placeholder="Type your script or comment here"
-            onChange={(event) => handleInput(event, index)} />
+            onChange={(event) => handleInput(event, index)}
+            value={subtitles[index]} />
         </div>
       )}
       <div className={styless.footer}>

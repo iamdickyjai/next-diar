@@ -3,7 +3,8 @@ import cn from 'classnames';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import download from 'downloadjs';
 
 import styles from '../styles/Home.module.css';
 import { DataContext } from '../components/reducer';
@@ -33,6 +34,23 @@ export default function Home() {
       toast.success("Done!", { duration: 2000 })
     }
   }, [isDone])
+
+  const handleDownloadRTTM = () => {
+    const timestamps = state.timestamp;
+    const output = [];
+
+    const rnd = makeid(5);
+
+    timestamps.forEach((ele) => {
+      const startTime = ele[0];
+      const endTime = ele[1];
+      const spkrID = ele[2];
+
+      output.push(`SPEAKER ${rnd} 1 ${startTime} ${endTime} <NA> <NA> spk${spkrID.toString().padStart(2, '0')} <NA> <NA>\n`);
+    })
+
+    download(new Blob(output), `${rnd}.rttm`);
+  }
 
   // Submit the result to corresponding application
   const submit = () => {
@@ -66,6 +84,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      {/* <Button>DIU</Button> */}
       <Toaster />
       <div className={styles.instruction}>
         <div>This application help you to label speaker identities in a conversation</div>
@@ -75,7 +94,8 @@ export default function Home() {
       <FileSelection setAllow={setAllow} setDone={setDone} disabled={isAllow} />
       <AppSelection disabled={!isAllow} />
       {isDone &&
-        <div className={styles.popupBtn}>
+        <div className={styles.popupContainer}>
+          <span onClick={handleDownloadRTTM}>Or You want raw rttm file?</span>
           <button onClick={submit}>GO</button><button onClick={reset}>Reset</button>
         </div>}
     </div>
@@ -205,7 +225,7 @@ function FileSelection(props) {
         <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />
         <label className={styles.inputOption}><input type="checkbox" ref={vad} />Apply VAD</label>
       </div>
-      <button onClick={submit}>Go</button>
+      <button onClick={submit}>Go <FontAwesomeIcon icon={faAnglesRight} /></button>
     </div>
   )
 }
@@ -216,7 +236,7 @@ function AppSelection(props) {
   const [blockArr, setBlock] = React.useState([
     {
       type: "extract", id: 0, check: false,
-      description: [["Automated audio extraction",],
+      description: [["Audio extraction",],
       ["Download files", <FontAwesomeIcon icon={faCheck} key={"e_2"} />]],
     },
     {
@@ -226,10 +246,12 @@ function AppSelection(props) {
       ["Script Generation", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],
       ["Commenting", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],]
     },
-    // {
-    //   type: "processing", id: 2, check: false,
-    //   description: ["..."]
-    // },
+    {
+      type: "Editing", id: 2, check: false,
+      description: [["Audio editing",],
+        // ["Download files", <FontAwesomeIcon icon={faCheck} key={"e_2"} />]
+      ],
+    },
   ]);
 
   React.useEffect(() => {
@@ -314,4 +336,15 @@ function isValidHttpUrl(str) {
     '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
     '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
   return !!pattern.test(str);
+}
+
+function makeid(length) {
+  var result = '';
+  var characters = 'abcdefghijklmnopqrstuvwxyz';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
+  }
+  return result;
 }

@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { DataContext, PlayContext } from "../../components/reducer";
 import Subtitle from "../../components/subtitle";
 import Extract from "../../components/extract";
-import Processing from "../../components/processing";
+import Editing from "../../components/editing";
 import styles from '../../styles/App.module.css';
 
 export default function App() {
@@ -104,7 +104,7 @@ export default function App() {
               <div className={styles.main}>
                 {state.application === 'extract' ? <Extract /> :
                   state.application === 'label' ? <Subtitle /> :
-                    <Processing />}
+                    <Editing />}
               </div>
               <button onClick={() => router.push('/')} className={styles.goBack}>
                 Go Back

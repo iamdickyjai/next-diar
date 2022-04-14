@@ -50,12 +50,8 @@
 }
 
 .info input {
-  font-size: 1.25rem;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  color: #564d3f;
   border-bottom: 0.1rem solid #564d3f;
 }
 
@@ -82,8 +78,6 @@
 }
 
 .input {
-  flex-grow: 1;
-  border: none;
   padding: 12px;
   margin-top: 1.5rem;
   width: 95%;
