@@ -1,5 +1,11 @@
 .optionBtn {
-  margin: 2rem 1rem;
+  margin: 2rem 0px;
+}
+
+.optionBtnGroup {
+  display: grid;
+  grid-template-columns: 125px 125px;
+  gap: 1rem;
 }
 
 .itemContainer {

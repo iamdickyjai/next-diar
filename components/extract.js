@@ -57,8 +57,10 @@ export default function Extract() {
 
   return (
     <>
-      <button onClick={handleSelectAll} className={styles.optionBtn}>Select all</button>
-      <button onClick={handleClear} className={styles.optionBtn}>Clear</button>
+      <div className={styles.optionBtnGroup}>
+        <button onClick={handleSelectAll} className={styles.optionBtn}>Select all</button>
+        <button onClick={handleClear} className={styles.optionBtn}>Clear</button>
+      </div>
       <div className={styles.itemContainer}>
         {state.timestamp.map((ele, index) =>
           <div className={styless.record} key={index}>
