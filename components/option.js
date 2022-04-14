@@ -19,7 +19,7 @@ export default function Option(props) {
         </div>
         <div className={cn(styles.filter, { [styles.filtered]: props.isFilter },)} onClick={props.handleFilter}>
           <FontAwesomeIcon icon={faFilter} className={styles.icon} />
-          <span className={styles.toolTip}>Filter segment below 3-second</span>
+          <span className={styles.toolTip}>Filter segment below 3 seconds</span>
         </div>
       </div>
     )
@@ -33,7 +33,7 @@ export default function Option(props) {
         </button>
         <div className={cn(styles.filter, { [styles.filtered]: props.isFilter },)} onClick={props.handleFilter}>
           <FontAwesomeIcon icon={faFilter} className={styles.icon} />
-          <span className={styles.toolTip}>Filter segment below 3-second</span>
+          <span className={styles.toolTip}>Filter segment below 3 seconds</span>
         </div>
       </div>
     )
@@ -47,7 +47,7 @@ export default function Option(props) {
         </div>
         <div className={cn(styles.filter, { [styles.filtered]: props.isFilter },)} onClick={props.handleFilter}>
           <FontAwesomeIcon icon={faFilter} className={styles.icon} />
-          <span className={styles.toolTip}>Filter segment below 3-second</span>
+          <span className={styles.toolTip}>Filter segment below 3 seconds</span>
         </div>
       </div>
     )
