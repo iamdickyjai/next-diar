@@ -1,39 +1,37 @@
 .container {
   display: flex;
   flex-direction: row;
-  font-size: 3rem;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+
+  position: sticky;
+  background-color: #14140a;
+  top: 0px;
+  z-index: 1;
+}
+
+.containerLight {
+  background-color: white;
 }
 
 .title {
+  font-size: 3rem;
   color: #ffc83d;
   text-shadow: 1px 1px 5px #ebaa05;
   padding-left: 1rem;
   padding-top: 0.5rem;
 }
 
-.settingBtn {
-  font-size: 2rem;
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Old versions of Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+.titleLight {
+  text-shadow: 1px 1px 3px #5b4100;
 }
 
-.settingBtn:hover {
-  color: rgb(255, 199, 146);
+.icon {
+  font-size: 1.5rem;
 }
 
-.settingBtn:active {
-  color: aquamarine;
+.themeWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }

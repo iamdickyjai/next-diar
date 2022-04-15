@@ -10,10 +10,11 @@ import CustomSelect from "./select";
 import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Extract.module.css';
-import { DataContext, PlayContext } from "./reducer";
+import { DataContext, PlayContext, ThemeContext } from "./reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Extract() {
+  const { theme, setTheme } = React.useContext(ThemeContext);
   const [state, dispatch] = React.useContext(DataContext);
   const { info, setInfo } = React.useContext(PlayContext);
   const [checked, setChecked] = React.useState(Array(state.timestamp.length).fill(false));
@@ -86,7 +87,7 @@ export default function Extract() {
                   <FontAwesomeIcon icon={faCircleCheck} className={cn(styless.checkIcon, { [styless.checkBoxSelected]: checked[index] })} />
                   <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
                 </label>
-                <label htmlFor={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+                <label htmlFor={index} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === index },)}>
                   <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
                 </label>
               </div>

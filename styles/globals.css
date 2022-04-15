@@ -6,7 +6,6 @@ body {
   padding: 0;
   margin: 0;
   background-color: #14140a;
-  /* background-color: white; */
   color: rgb(137, 128, 100);
   font-family: 'Montserrat', sans-serif;
 }
@@ -65,7 +64,7 @@ input[type=text] {
   background-color: #d7d2a4;
   border-width: 2px;
   border-style: solid;
-  border-color: #d7da664a;
+  border-color: #6e70357b;
   border-radius: 4px;
 
   font-size: 1.25rem;

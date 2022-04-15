@@ -7,7 +7,7 @@ import { faCheck, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import download from 'downloadjs';
 
 import styles from '../styles/Home.module.css';
-import { DataContext } from '../components/reducer';
+import { DataContext, ThemeContext } from '../components/reducer';
 
 
 export default function Home() {
@@ -111,6 +111,7 @@ function FileSelection(props) {
   const vad = React.useRef();
   const [isFile, setDecision] = React.useState(false);
   const [state, dispatch] = React.useContext(DataContext);
+  const { theme, setTheme } = React.useContext(ThemeContext);
 
   const setDone = props.setDone;
   const setAllow = props.setAllow;
@@ -221,7 +222,7 @@ function FileSelection(props) {
   }
 
   return (
-    <div className={cn(styles.inputContainer, { [styles.disabled]: disabled })}>
+    <div className={cn(styles.inputContainer, { [styles.disabled]: disabled }, { [styles.inputContainerLight]: theme === 'light' })}>
       <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink}
         placeholder="YouTube link here" />
       <span style={{ 'font-size': '24px' }}>or</span>
@@ -250,12 +251,12 @@ function AppSelection(props) {
       ["Script Generation", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],
       ["Commenting", <FontAwesomeIcon icon={faCheck} key={"l_3"} />],]
     },
-    {
-      type: "Editing", id: 2, check: false,
-      description: [["Audio editing",],
-        // ["Download files", <FontAwesomeIcon icon={faCheck} key={"e_2"} />]
-      ],
-    },
+    // {
+    //   type: "Editing", id: 2, check: false,
+    //   description: [["Audio editing",],
+    //     // ["Download files", <FontAwesomeIcon icon={faCheck} key={"e_2"} />]
+    //   ],
+    // },
   ]);
 
   React.useEffect(() => {
@@ -315,6 +316,7 @@ function SelectBlock(props) {
   const disabled = props.disabled;
 
   const [state, dispatch] = React.useContext(DataContext);
+  const { theme, setTheme } = React.useContext(ThemeContext);
 
   const Click = () => {
     dispatch({ type: "UPDATE_SELECTION", application: type });
@@ -323,7 +325,7 @@ function SelectBlock(props) {
 
   return (
     <div
-      className={cn(styles.block, { [styles.selected]: check }, { [styles.disabled]: disabled })}
+      className={cn(styles.block, { [styles.selected]: check }, { [styles.disabled]: disabled }, { [styles.blockLight]: theme === 'light' })}
       onClick={() => Click()}
     >
       <div className={styles.blockTitle}>{type.charAt(0).toUpperCase() + type.slice(1)}</div>

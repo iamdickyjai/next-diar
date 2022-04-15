@@ -8,9 +8,10 @@ import Option from "./option";
 import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Subtitle.module.css';
-import { DataContext, PlayContext } from "./reducer";
+import { ThemeContext, DataContext, PlayContext } from "./reducer";
 
 export default function Subtitle() {
+  const { theme, setTheme } = React.useContext(ThemeContext);
   const [state, dispatch] = React.useContext(DataContext);
   const { info, setInfo } = React.useContext(PlayContext);
   const [subtitles, setSubtitle] = React.useState(Array(state.timestamp.length).fill(''));
@@ -161,7 +162,7 @@ export default function Subtitle() {
           textList.current[index] = true;
           if (!isFilter || (isFilter && ele[1] - ele[0] > 3)) {
             return (
-              <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
+              <div key={index} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === index },)}>
                 <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
                 <input className={styles.input} type='text'
                   placeholder="Type your script or comment here"

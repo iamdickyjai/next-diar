@@ -51,6 +51,11 @@
   /* Non-prefixed version, currently */
 }
 
+.inputContainerLight {
+  background-color: #a99c70;
+  box-shadow: inset 0px 0px 5px #ffffff;
+}
+
 .inputUrl {
   width: 100%;
   padding: 5px 10px;
@@ -97,6 +102,11 @@
   user-select: none;
   /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.blockLight {
+  background-color: #a99c70;
+  box-shadow: inset 0px 0px 20px #cdbe91;
 }
 
 .blockTitle {

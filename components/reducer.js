@@ -1,5 +1,7 @@
 import React from "react";
 
+export const ThemeContext = React.createContext();
+
 export const DataContext = React.createContext();
 
 export const PlayContext = React.createContext();

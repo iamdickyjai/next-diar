@@ -5,7 +5,7 @@ config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatic
 
 import Layout from '../components/layout'
 import '../styles/globals.css'
-import { DataContext, reducers } from '../components/reducer';
+import { ThemeContext, DataContext, reducers } from '../components/reducer';
 import { createTheme, ThemeProvider } from '@mui/material';
 
 export default function MyApp({ Component, pageProps }) {
@@ -37,13 +37,26 @@ export default function MyApp({ Component, pageProps }) {
 
   const reducer = React.useReducer(reducers, { file: null, timestamp: null, application: null, link: null });
 
+  const [MainTheme, setTheme] = React.useState('dark');
+
   return (
-    <ThemeProvider theme={theme}>
-      <DataContext.Provider value={reducer}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </DataContext.Provider>
-    </ThemeProvider>
+    <ThemeContext.Provider value={{ theme: MainTheme, setTheme }}>
+      <ThemeProvider theme={theme}>
+        <DataContext.Provider value={reducer}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </DataContext.Provider>
+      </ThemeProvider>
+    </ThemeContext.Provider>
   )
 }
+
+
+{/* <style jsx global>{`
+body {
+  background-color:gray;
+  color: white;
+  height: 100vh;
+}
+`}</style> */}
