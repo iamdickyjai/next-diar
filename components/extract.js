@@ -2,6 +2,7 @@ import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 import Item from "./item";
 import Option from "./option";
@@ -10,6 +11,7 @@ import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Extract.module.css';
 import { DataContext, PlayContext } from "./reducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Extract() {
   const [state, dispatch] = React.useContext(DataContext);
@@ -80,7 +82,10 @@ export default function Extract() {
             checkList.current[index] = true;
             return (
               <div className={styless.record} key={index}>
-                <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
+                <label>
+                  <FontAwesomeIcon icon={faCircleCheck} className={cn(styless.checkIcon, { [styless.checkBoxSelected]: checked[index] })} />
+                  <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
+                </label>
                 <label htmlFor={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
                   <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
                 </label>
