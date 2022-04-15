@@ -6,7 +6,6 @@
 
 .instruction {
   font-size: 2rem;
-  color: rgb(137, 128, 100);
   text-align: center;
   width: 90%;
   margin-top: 1rem;
@@ -19,7 +18,7 @@
 
 .reminder {
   font-size: 1rem;
-  color: rgba(137, 128, 100, 0.854);
+  opacity: 0.854;
 }
 
 .inputContainer {
@@ -80,6 +79,7 @@
   min-height: 200px;
   border-radius: 15px;
   background-color: #8d825e;
+  color: #3b352c;
   box-shadow: inset 0px 0px 10px #000000;
   padding: 1.5rem;
   margin: 1rem;

@@ -46,7 +46,10 @@ export default function Home() {
       const endTime = ele[1];
       const spkrID = ele[2];
 
-      output.push(`SPEAKER ${rnd} 1 ${startTime} ${endTime} <NA> <NA> spk${spkrID.toString().padStart(2, '0')} <NA> <NA>\n`);
+      const duration = Math.round(((endTime - startTime) + Number.EPSILON) * 100) / 100;
+
+
+      output.push(`SPEAKER ${rnd} 1 ${startTime} ${duration} <NA> <NA> spk${spkrID.toString().padStart(2, '0')} <NA> <NA>\n`);
     })
 
     download(new Blob(output), `${rnd}.rttm`);

@@ -16,6 +16,7 @@ export default function Subtitle() {
   const [subtitles, setSubtitle] = React.useState(Array(state.timestamp.length).fill(''));
   const [asrBtnDisabled, setAsrBtn] = React.useState(false);
   const [isFilter, setFilter] = React.useState(false);
+  const textList = React.useRef(Array(state.timestamp.length).fill(true));
 
   const toDate = (sec, type) => {
     if (type === 'standard') {
@@ -48,7 +49,7 @@ export default function Subtitle() {
 
       const formData = new FormData();
       formData.append("file", audio);
-      formData.append("timestamps", state.timestamp);
+      formData.append("timestamps", timestamps);
 
       const response = await fetch(process.env.url + '/asr', {
         method: "POST",
@@ -82,6 +83,7 @@ export default function Subtitle() {
         }
         setSubtitle(newArr);
       } else {
+        setAsrBtn(false);
         switch (response.status) {
           case 500:
             toast.error("Server error occured", { id: "error", duration: 2000 });
@@ -92,7 +94,6 @@ export default function Subtitle() {
         }
       }
     } catch (error) {
-      console.log(error);
       toast.dismiss(toast.loading("", { id: "loading" }));
       toast.error("Unexpected error occurred, please try again later.", { id: 'error' });
     } finally {
@@ -117,13 +118,15 @@ export default function Subtitle() {
     if (format === 'srt') {
       const output = [];
       subtitles.forEach((ele, index) => {
-        const start = toDate(state.timestamp[index][0], 'standard');
-        const end = toDate(state.timestamp[index][1], 'standard')
-        const spkr = state.timestamp[index][3];
-        output.push(index + '\n');
-        output.push(`${start} --> ${end}\n`)
-        output.push(ele ? (spkr + " said: " + ele + '\n') : '\n');
-        output.push('\n');
+        if (textList.current[index] == true) {
+          const start = toDate(state.timestamp[index][0], 'standard');
+          const end = toDate(state.timestamp[index][1], 'standard')
+          const spkr = state.timestamp[index][3];
+          output.push(index + '\n');
+          output.push(`${start} --> ${end}\n`)
+          output.push(ele ? (spkr + " said: " + ele + '\n') : '\n');
+          output.push('\n');
+        }
       })
 
       // console.log(output);
@@ -134,11 +137,13 @@ export default function Subtitle() {
     if (format === 'txt') {
       const output = [];
       subtitles.forEach((ele, index) => {
-        const start = toDate(state.timestamp[index][0], 'short');
-        const spkr = state.timestamp[index][3];
-        if (ele) {
-          output.push(`at ${start}, ${spkr} said: ${ele}\n`);
-          output.push('\n');
+        if (textList.current[index] == true) {
+          const start = toDate(state.timestamp[index][0], 'short');
+          const spkr = state.timestamp[index][3];
+          if (ele) {
+            output.push(`at ${start}, ${spkr} said: ${ele}\n`);
+            output.push('\n');
+          }
         }
       })
 
@@ -153,6 +158,7 @@ export default function Subtitle() {
         asrBtnDisabled={asrBtnDisabled} isFilter={isFilter} />
       <div className={appWrapper.itemContainer}>
         {state.timestamp.map((ele, index) => {
+          textList.current[index] = true;
           if (!isFilter || (isFilter && ele[1] - ele[0] > 3)) {
             return (
               <div key={index} className={cn(styles.wrapper, { [styles.selected]: info.index === index },)}>
@@ -163,14 +169,22 @@ export default function Subtitle() {
                   value={subtitles[index]} />
               </div>
             )
+          } else {
+            textList.current[index] = false;
           }
         })}
       </div>
       <div className={styless.footer}>
         <span className={styless.export}>Export</span>
         <div className={styless.formatOption}>
-          <button className={styless.btn} onClick={() => handleExport('srt')}>Subtitle? (.srt)</button>
-          <button className={styless.btn} onClick={() => handleExport('txt')}>Label or comment? (.txt)</button>
+          <div className={styless.btnContainer}>
+            <label className={styless.btnLabel}>Looking for Subtitle?</label>
+            <button className={styless.btn} onClick={() => handleExport('srt')}> .srt</button>
+          </div>
+          <div className={styless.btnContainer}>
+            <label className={styless.btnLabel}>Label or comment?</label>
+            <button className={styless.btn} onClick={() => handleExport('txt')}>.txt</button>
+          </div>
         </div>
       </div>
     </>
