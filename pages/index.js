@@ -225,7 +225,7 @@ function FileSelection(props) {
     <div className={cn(styles.inputContainer, { [styles.disabled]: disabled }, { [styles.inputContainerLight]: theme === 'light' })}>
       <input type="text" className={styles.inputUrl} value={link} onChange={chooseLink}
         placeholder="YouTube link here" />
-      <span style={{ 'font-size': '24px' }}>or</span>
+      <span style={{ 'fontSize': '24px' }}>or</span>
       <div>
         <input type="file" accept='audio/*' onChange={chooseUpload} ref={fileRef} />
         <label className={styles.inputOption}><input type="checkbox" ref={vad} />Apply VAD</label>

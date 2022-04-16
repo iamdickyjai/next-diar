@@ -31,6 +31,18 @@ export default function MyApp({ Component, pageProps }) {
             fontStyle: 'italic',
           }
         }
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "& .MuiSwitch-switchBase.Mui-checked": {
+              color: '#ffc83d',
+            },
+            "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: '#ffc83d',
+            }
+          }
+        }
       }
     }
   })
