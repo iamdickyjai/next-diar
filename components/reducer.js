@@ -16,8 +16,9 @@ export const reducers = (state, action) => {
       }
 
       const newArr = action.timestamp;
-      newArr.forEach(ele => {
+      newArr.forEach((ele, index) => {
         ele.push(ele[2].toString());
+        ele.push(index);
       })
 
       return {

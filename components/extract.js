@@ -12,6 +12,7 @@ import styles from '../styles/Item.module.css';
 import styless from '../styles/Extract.module.css';
 import { DataContext, PlayContext, ThemeContext } from "./reducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Pagination } from "@mui/material";
 
 export default function Extract() {
   const { theme, setTheme } = React.useContext(ThemeContext);
@@ -20,7 +21,16 @@ export default function Extract() {
   const [checked, setChecked] = React.useState(Array(state.timestamp.length).fill(false));
   const [isFilter, setFilter] = React.useState(false);
   const [selectedSpkr, setSpeaker] = React.useState("");
-  const checkList = React.useRef(Array(state.timestamp.length).fill(false));
+  const [displayedItem, setDisplay] = React.useState(state.timestamp);
+  const [page, setPage] = React.useState(1);
+
+  const pageCount = 10;
+
+  React.useEffect(() => {
+    const itemOnScreen = state.timestamp.filter((ele) => (!isFilter || (isFilter && ele[1] - ele[0] > 3)) && (selectedSpkr === "" || selectedSpkr == ele[2]));
+    setPage(1);
+    setDisplay(itemOnScreen);
+  }, [isFilter, selectedSpkr])
 
   const handleChecked = (index) => {
     const newArr = [...checked];
@@ -44,15 +54,15 @@ export default function Extract() {
     setSpeaker(event.target.value);
   }
 
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  }
+
   const handleDownload = async () => {
     toast.loading("Processing...", { id: "loading" });
 
     const selectedTimestamp = [];
-    checked.forEach((ele, index) => {
-      if (ele && checkList.current[index] == true) {
-        selectedTimestamp.push(state.timestamp[index])
-      }
-    })
+    selectedTimestamp = displayedItem.filter(ele => checked[ele[4]] == true)
 
     const formData = new FormData();
     formData.append("file", state.file);
@@ -78,27 +88,24 @@ export default function Extract() {
         isFilter={isFilter} />
       <CustomSelect timestamp={state.timestamp} handleSelectChange={handleSelectChange} selectedSpkr={selectedSpkr} isFilter={isFilter} />
       <div className={appWrapper.itemContainer}>
-        {state.timestamp.map((ele, index) => {
-          if ((!isFilter || (isFilter && ele[1] - ele[0] > 3)) && (selectedSpkr === "" || selectedSpkr == ele[2])) {
-            checkList.current[index] = true;
-            return (
-              <div className={styless.record} key={index}>
-                <label>
-                  <FontAwesomeIcon icon={faCircleCheck} className={cn(styless.checkIcon, { [styless.checkBoxSelected]: checked[index] })} />
-                  <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(index)} />
-                </label>
-                <label htmlFor={index} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === index },)}>
-                  <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-                </label>
-              </div>
-            )
-          } else {
-            checkList.current[index] = false;
-          }
-        })
+        {displayedItem.map((ele, index) => {
+          return (
+            <div className={styless.record} key={ele[4]}>
+              <label>
+                <FontAwesomeIcon icon={faCircleCheck} className={cn(styless.checkIcon, { [styless.checkBoxSelected]: checked[ele[4]] })} />
+                <input type='checkbox' id={index} className={styless.checkBox} checked={checked[index]} onChange={() => handleChecked(ele[4])} />
+              </label>
+              <label htmlFor={index} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === ele[4] },)}>
+                <Item index={ele[4]} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+              </label>
+            </div>
+          )
+        }).slice(pageCount * (page - 1), pageCount * (page - 1) + pageCount)
         }
+        <Pagination page={page} count={Math.ceil(displayedItem.length / pageCount)}
+          onChange={handlePageChange} showFirstButton showLastButton />
       </div>
-      <button onClick={handleDownload} disabled={!checked.some((ele, index) => ele && checkList.current[index])}
+      <button onClick={handleDownload} disabled={!displayedItem.some((ele) => checked[ele[4]] == true)}
         className={styless.dlBtn}>
         Download
       </button>
