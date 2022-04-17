@@ -23,7 +23,7 @@ export default function Subtitle() {
 
   const snapshot4ReceiveASR = React.useRef();
 
-  const pageCount = 2;
+  const pageCount = 10;
 
   React.useEffect(() => {
     const itemOnScreen = state.timestamp.filter((ele) => (!isFilter || (isFilter && ele[1] - ele[0] > 3)));
