@@ -329,7 +329,9 @@ function SelectBlock(props) {
       onClick={() => Click()}
     >
       <div className={styles.blockTitle}>{type.charAt(0).toUpperCase() + type.slice(1)}</div>
-      {description.map((ele, index) => <li className={styles.appDescription} key={index}>{ele[0]} {ele[1]}</li>)}
+      <ul>
+        {description.map((ele, index) => <li className={styles.appDescription} key={index}>{ele[0]} {ele[1]}</li>)}
+      </ul>
     </div>
   )
 }
