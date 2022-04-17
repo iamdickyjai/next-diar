@@ -2,6 +2,7 @@ import React from "react";
 import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
+import { Pagination } from "@mui/material";
 
 import Item from "./item";
 import Option from "./option";
@@ -17,7 +18,24 @@ export default function Subtitle() {
   const [subtitles, setSubtitle] = React.useState(Array(state.timestamp.length).fill(''));
   const [asrBtnDisabled, setAsrBtn] = React.useState(false);
   const [isFilter, setFilter] = React.useState(false);
-  const textList = React.useRef(Array(state.timestamp.length).fill(true));
+  const [displayedItem, setDisplay] = React.useState(state.timestamp);
+  const [page, setPage] = React.useState(1);
+
+  const pageCount = 10;
+
+  React.useEffect(() => {
+    const itemOnScreen = state.timestamp.filter((ele) => (!isFilter || (isFilter && ele[1] - ele[0] > 3)));
+    setPage(1);
+    setDisplay(itemOnScreen);
+  }, [isFilter])
+
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [page])
 
   const toDate = (sec, type) => {
     if (type === 'standard') {
@@ -107,25 +125,27 @@ export default function Subtitle() {
   }
 
   const handleInput = (event, index) => {
-    const newArr = [];
-    subtitles.forEach((ele, index) => {
-      newArr[index] = ele;
-    });
+    const newArr = [...subtitles];
     newArr[index] = event.target.value;
     setSubtitle(newArr);
+  }
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
   }
 
   const handleExport = (format) => {
     if (format === 'srt') {
       const output = [];
-      subtitles.forEach((ele, index) => {
-        if (textList.current[index] == true) {
-          const start = toDate(state.timestamp[index][0], 'standard');
-          const end = toDate(state.timestamp[index][1], 'standard')
-          const spkr = state.timestamp[index][3];
-          output.push(index + '\n');
+      displayedItem.forEach((ele) => {
+        if (subtitles[ele[4]]) {
+
+          const start = toDate(ele[0], 'standard');
+          const end = toDate(ele[1], 'standard')
+          const spkr = ele[3];
+          output.push(ele[4] + '\n');
           output.push(`${start} --> ${end}\n`)
-          output.push(ele ? (spkr + " said: " + ele + '\n') : '\n');
+          output.push(spkr + " said: " + subtitles[ele[4]] + '\n');
           output.push('\n');
         }
       })
@@ -137,16 +157,18 @@ export default function Subtitle() {
 
     if (format === 'txt') {
       const output = [];
-      subtitles.forEach((ele, index) => {
-        if (textList.current[index] == true) {
-          const start = toDate(state.timestamp[index][0], 'short');
-          const spkr = state.timestamp[index][3];
-          if (ele) {
-            output.push(`at ${start}, ${spkr} said: ${ele}\n`);
-            output.push('\n');
-          }
+      displayedItem.forEach((ele) => {
+        if (subtitles[ele[4]]) {
+
+          const start = toDate(ele[0], 'short');
+          const spkr = ele[3];
+
+          output.push(`at ${start}, ${spkr} said: ${subtitles[ele[4]]}\n`);
+          output.push('\n');
         }
       })
+
+      console.log(output);
 
       download(new Blob(output), 'result.txt');
       return;
@@ -158,22 +180,23 @@ export default function Subtitle() {
       <Option handleRequest={handleRequest} handleFilter={handleFilter}
         asrBtnDisabled={asrBtnDisabled} isFilter={isFilter} />
       <div className={appWrapper.itemContainer}>
-        {state.timestamp.map((ele, index) => {
-          textList.current[index] = true;
-          if (!isFilter || (isFilter && ele[1] - ele[0] > 3)) {
-            return (
-              <div key={index} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === index },)}>
-                <Item index={index} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
-                <input className={styles.input} type='text'
-                  placeholder="Type your script or comment here"
-                  onChange={(event) => handleInput(event, index)}
-                  value={subtitles[index]} />
-              </div>
-            )
-          } else {
-            textList.current[index] = false;
-          }
-        })}
+        {displayedItem.map((ele, index) => {
+          return (
+            <div key={ele[4]} className={cn(styles.wrapper, { [styles.wrapperLight]: theme === 'light' }, { [styles.selected]: info.index === ele[4] },)}>
+              <Item index={ele[4]} startTime={ele[0]} endTime={ele[1]} spkrId={ele[2]} spkrName={ele[3]} />
+              <input className={styles.input} type='text'
+                placeholder="Type your script or comment here"
+                onChange={(event) => handleInput(event, ele[4])}
+                value={subtitles[ele[4]]} />
+            </div>
+          )
+        }).slice(pageCount * (page - 1), pageCount * (page - 1) + pageCount)
+        }
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Pagination page={page} count={Math.ceil(displayedItem.length / pageCount)}
+            onChange={handlePageChange} showFirstButton showLastButton />
+        </div>
       </div>
       <div className={styless.footer}>
         <span className={styless.export}>Export</span>

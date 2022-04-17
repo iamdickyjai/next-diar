@@ -43,6 +43,17 @@ export default function MyApp({ Component, pageProps }) {
             }
           }
         }
+      },
+      MuiPaginationItem: {
+        styleOverrides: {
+          root: {
+            color: '#564d3f',
+            fontSize: '1.25rem',
+            '&.Mui-selected': {
+              backgroundColor: '#7e7b7833',
+            }
+          }
+        }
       }
     }
   })

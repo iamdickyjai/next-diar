@@ -3,6 +3,8 @@ import cn from 'classnames';
 import download from "downloadjs";
 import toast from "react-hot-toast";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Pagination } from "@mui/material";
 
 import Item from "./item";
 import Option from "./option";
@@ -11,8 +13,6 @@ import appWrapper from '../styles/AppWrapper.module.css';
 import styles from '../styles/Item.module.css';
 import styless from '../styles/Extract.module.css';
 import { DataContext, PlayContext, ThemeContext } from "./reducer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Pagination } from "@mui/material";
 
 export default function Extract() {
   const { theme, setTheme } = React.useContext(ThemeContext);
@@ -31,6 +31,14 @@ export default function Extract() {
     setPage(1);
     setDisplay(itemOnScreen);
   }, [isFilter, selectedSpkr])
+
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [page])
 
   const handleChecked = (index) => {
     const newArr = [...checked];
@@ -102,8 +110,10 @@ export default function Extract() {
           )
         }).slice(pageCount * (page - 1), pageCount * (page - 1) + pageCount)
         }
-        <Pagination page={page} count={Math.ceil(displayedItem.length / pageCount)}
-          onChange={handlePageChange} showFirstButton showLastButton />
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Pagination page={page} count={Math.ceil(displayedItem.length / pageCount)}
+            onChange={handlePageChange} showFirstButton showLastButton />
+        </div>
       </div>
       <button onClick={handleDownload} disabled={!displayedItem.some((ele) => checked[ele[4]] == true)}
         className={styless.dlBtn}>
