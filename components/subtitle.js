@@ -21,7 +21,9 @@ export default function Subtitle() {
   const [displayedItem, setDisplay] = React.useState(state.timestamp);
   const [page, setPage] = React.useState(1);
 
-  const pageCount = 10;
+  const snapshot4ReceiveASR = React.useRef();
+
+  const pageCount = 2;
 
   React.useEffect(() => {
     const itemOnScreen = state.timestamp.filter((ele) => (!isFilter || (isFilter && ele[1] - ele[0] > 3)));
@@ -59,7 +61,7 @@ export default function Subtitle() {
   }
 
   const handleRequest = async () => {
-    const timestamps = state.timestamp;
+    const timestamps = displayedItem.map(ele => [ele[0], ele[1], ele[2], ele[3]]);
     const audio = state.file;
 
     try {
@@ -69,6 +71,8 @@ export default function Subtitle() {
       const formData = new FormData();
       formData.append("file", audio);
       formData.append("timestamps", timestamps);
+
+      snapshot4ReceiveASR.current = displayedItem;
 
       const response = await fetch(process.env.url + '/asr', {
         method: "POST",
@@ -85,16 +89,19 @@ export default function Subtitle() {
       toast.dismiss(toast.loading("", { id: "loading" }));
 
       if (response.status == 200) {
-        const newArr = [];
+        const newArr = [...subtitles];
         const isNull = true;
         result.result.forEach((ele, index) => {
-          if (ele[0] === "") {
-            newArr.push(subtitles[index]);
-          } else {
+          const pointTo = snapshot4ReceiveASR.current[index];
+          const subtitleIndex = pointTo[4];
+
+          if (ele[0] !== "") {
             isNull = false;
-            newArr.push(ele[0])
+            newArr[subtitleIndex] = ele[0];
           }
         })
+
+        snapshot4ReceiveASR.current = null
         if (isNull) {
           toast.error("Server do not receive any transcript!", { duration: 1000 });
         } else {
@@ -150,7 +157,6 @@ export default function Subtitle() {
         }
       })
 
-      // console.log(output);
       download(new Blob(output), 'subtitle.srt');
       return;
     }
@@ -167,8 +173,6 @@ export default function Subtitle() {
           output.push('\n');
         }
       })
-
-      console.log(output);
 
       download(new Blob(output), 'result.txt');
       return;
