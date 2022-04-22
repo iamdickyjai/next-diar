@@ -13,14 +13,14 @@ export default function CustomSelect({ timestamp, handleSelectChange, selectedSp
     if (isFilter) {
       if (ele[2] > 3) {
         if (index > 0) {
-          ele[0] != testArr[index - 1][0] && spkrGp.push(ele);
+          ele[0] !== spkrGp[spkrGp.length - 1][0] && spkrGp.push(ele);
         } else {
           spkrGp.push(ele);
         }
       }
     } else {
       if (index > 0) {
-        ele[0] != testArr[index - 1][0] && spkrGp.push(ele);
+        ele[0] !== spkrGp[spkrGp.length - 1][0] && spkrGp.push(ele);
       } else {
         spkrGp.push(ele);
       }

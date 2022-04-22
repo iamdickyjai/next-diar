@@ -14,7 +14,7 @@ export default function Item({ index, startTime, endTime, spkrId, spkrName }) {
   const [start, setStart] = React.useState(startTime);
 
   const [end, setEnd] = React.useState(endTime);
-  const [speaker, setSpeaker] = React.useState();
+  const [speaker, setSpeaker] = React.useState("");
   const prevSpkr = React.useRef();
   const [isPlay, setPlay] = React.useState(false);
 
