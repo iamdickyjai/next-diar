@@ -12,7 +12,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Connecting to server
 This application support two api server
 1. GCP
-2. Local server
+2. Local server 
 It can be modified in the next.config.js by changing the url variable. For the local server, it is used with the flask-api [https://github.com/iamdickyjai/flask-api]
 
 ## About this project
